@@ -1,0 +1,5 @@
+export const GOTO_CHAPTER = 'GOTO_CHAPTER'
+export const GOTO_BOOK = 'GOTO_BOOK'
+export const SET_TEXT_LOCALE = 'SET_TEXT_LOCALE'
+export const SET_VOICE_LOCALE = 'SET_VOICE_LOCALE'
+export const SET_AUDIO = 'SET_AUDIO'

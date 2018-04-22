@@ -1,0 +1,80 @@
+{
+    "story": {
+        "0": { "text": "How do you feel about ranged weapons.", "next":"-1",
+        "choices":[
+            {"text":"I rather fight up close", "next":"m1"},
+            {"text":"I rather keep my distance", "next":"r1"}
+            ]},
+        "r1": { "text": "Do you like spending all your money", "next":"-1",
+        "choices":[
+            {"text":"Of course I'm loaded", "next":"r2"},
+            {"text":"I'd rather save", "next":"fbow"}
+            ]},
+        "r2": { "text": "What do you prefer", "next":"-1",
+            "choices":[
+                {"text":"Max damage", "next":"fhbg"},
+                {"text":"Mobility and utility", "next":"flbg"}
+                ]},
+        "m1": { "text": "How do you feel about advanced techology.", "next":"-1",
+            "choices":[
+                {"text":"I love it", "next":"m2"},
+                {"text":"I find it too complicated", "next":"m5"}
+                ]},
+        "m2": { "text": "How do you feel about reloading/maintaining ammo.", "next":"-1",
+            "choices":[
+                {"text":"I enjoy the extra detail of ammo management", "next":"m3"},
+                {"text":"Its too much work", "next":"m5"}
+                ]},
+        "m3": { "text": "What do you think about transforming weapons.", "next":"-1",
+            "choices":[
+                {"text":"I enjoy looking extra stylish", "next":"m4"},
+                {"text":"I rather just blow things up", "next":"fgl"}
+                ]},
+
+        "m4": { "text": "If a diablos is charging at you, do you.", "next":"-1",
+            "choices":[
+                {"text":"I'd gaurd and counter attack", "next":"fcb"},
+                {"text":"I'd evade and counter attack", "next":"fsa"}
+                ]},
+        "m5": { "text": "Which of the following describes you most.", "next":"-1",
+            "choices":[
+                {"text":"I'd prefer to optimize my own damage output", "next":"m7"},
+                {"text":"I'd prefer to optimize my teams overall damage output", "next":"m6"}
+                ]},
+        "m6": { "text": "Do you consider yourself as a healer", "next":"-1",
+            "choices":[
+                {"text":"Of course I'm a medic", "next":"fsns"},
+                {"text":"Nope they can heal themselves", "next":"fhh"}
+                ]},
+        "m7": { "text": "Do you prefer", "next":"-1",
+            "choices":[
+                {"text":"Finnese", "next":"-1"},
+                {"text":"Savage Force", "next":"-1"}
+                ]},
+        "m8": { "text": "Would you prefer using one blade or two", "next":"-1",
+            "choices":[
+                {"text":"Two blades are better than 1", "next":"fds"},
+                {"text":"I am one sword", "next":"fls"}
+                ]},
+        "m9": { "text": "Which class describes you most", "next":"-1",
+            "choices":[
+                {"text":"I am a Tank, with a big shield", "next":"fl"},
+                {"text":"I am a Striker, who uses gurilla tactics", "next":"fgs"},
+                {"text":"I am a Bruiser, who knocks out his foes", "next":"fh"}
+                ]},
+        "fbow": { "text": "I recommend you to use a Bow", "next":"-1"},
+        "fhbg": { "text": "I recommend you to use a Heavy Bow Gun", "next":"-1"},
+        "flbg": { "text": "I recommend you to use a Light Bow Gun", "next":"-1"},
+        "fcb": { "text": "I recommend you to use a Charge Blade", "next":"-1"},
+        "fsa": { "text": "I recommend you to use a Switch Axe", "next":"-1"},
+        "fsns": { "text": "I recommend you to use a Sword and Sheild", "next":"-1"},
+        "fhh": { "text": "I recommend you to use a Hunting Horn", "next":"-1"},
+        "fds": { "text": "I recommend you to use the Dual Blades", "next":"-1"},
+        "fls": { "text": "I recommend you to use a Long Sword", "next":"-1"},
+        "fl": { "text": "I recommend you to use a Lance", "next":"-1"},
+        "fgs": { "text": "I recommend you to use a Great Sword", "next":"-1"},
+        "fh": { "text": "I recommend you to use a Hammer", "next":"-1"},
+        "fgl": { "text": "I recommend you to use a Gun Lance", "next":"-1"}
+    },
+    "voice":false
+}
