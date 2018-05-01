@@ -47,20 +47,20 @@ class Navigation extends Component {
             <div className="Navigation">
                 Navigation:
                 <br />
-                <select className="form-control" value={book} onChange={(event)=>{this.onChangeBook(event)}}>
+                <select id="navBook" className="form-control" value={book} onChange={(event)=>{this.onChangeBook(event)}}>
                     {b.map(mapBooks)}
                 </select>
-                <select className="form-control" value={chapter} onChange={(event)=>{this.onChangeChapter(event)}}>
+                <select id="navChapter" className="form-control" value={chapter} onChange={(event)=>{this.onChangeChapter(event)}}>
                     {chapterList.map(mapChapters)}
                 </select>
                 <br />
                 Text:
-                <select className="form-control" value={text} onChange={(event)=>{this.onChangeText(event)}}>
+                <select id="navText" className="form-control" value={text} onChange={(event)=>{this.onChangeText(event)}}>
                     <option value='EN'>English</option>
                     <option value='ZH'>Chinese</option>
                 </select>
                 Voice: 
-                <select className="form-control" value={voice} onChange={(event)=>{this.onChangeVoice(event)}}>
+                <select id="navVoice" className="form-control" value={voice} onChange={(event)=>{this.onChangeVoice(event)}}>
                     <option value='EN'>English</option>
                     <option value='ZH'>Chinese</option>
                 </select>
@@ -68,8 +68,8 @@ class Navigation extends Component {
                 <br /><br />
                 <center>
                 { audio?
-                (<button className="btn btn-outline-primary" onClick={(event)=>{this.onChangeAudioEnable(false)}}>Mute</button>):
-                (<button className="btn btn-outline-secondary" onClick={(event)=>{this.onChangeAudioEnable(true)}}>unMute</button>)
+                (<button id="mute" className="btn btn-outline-primary" onClick={(event)=>{this.onChangeAudioEnable(false)}}>Mute</button>):
+                (<button id="unmute" className="btn btn-outline-secondary" onClick={(event)=>{this.onChangeAudioEnable(true)}}>unMute</button>)
                 }
                 </center>
             </div>
