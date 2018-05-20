@@ -36,3 +36,11 @@ it('is able to toggle mute', () => {
   var unmute = document.getElementById('unmute');
   unmute.click();
 });
+
+// test next button on next chapter
+it('is able to goto next chapter', ()=>{
+    var nextButton = document.getElementById('nextButton');
+    for(var it = 0; it<50;++it){
+        nextButton.click();
+    }
+});
