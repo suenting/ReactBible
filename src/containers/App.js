@@ -2,17 +2,12 @@ import React from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as Actions from '../actions'
-import Book from '../components/Book'
-import Navigation from '../components/Navigation'
 import './App.css';
+import Shell from './Shell'
 
 const App = ({ actions }) => (
   <div className="App">
-    <header className="App-header">
-      <h1 className="App-title">Welcome to React Bible</h1>
-    </header>
-    <Navigation actions={actions} />
-    <Book actions={actions} />
+    <Shell actions={actions}></Shell>
   </div>
 );
 

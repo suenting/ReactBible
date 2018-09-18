@@ -11,6 +11,7 @@ class Chapter extends Component {
         actions: PropTypes.object.isRequired
     }
     onNext(bible, book, chapter) {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
         // if next chapter
         var intChapter = parseInt(chapter, 10);
         if (intChapter < (book.chapters.length - 1)) {
