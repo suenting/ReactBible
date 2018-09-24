@@ -89,7 +89,8 @@ const styles = theme => ({
         padding: '1em 1em 0em 1em'
     },
     fixed:{
-        position: 'fixed'
+        position: 'fixed',
+        width: '0px'
     },
     root: {
         flexGrow: 1,
