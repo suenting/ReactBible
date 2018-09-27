@@ -1,6 +1,7 @@
 import { GOTO_BOOK, GOTO_CHAPTER, SET_AUDIO, SET_TEXT_LOCALE, SET_VOICE_LOCALE } from '../constants/ActionTypes'
 
-const initialState = {
+// default state
+var initialState = {
     book:"gn",
     chapter:"0",
     audio:true,
@@ -8,36 +9,63 @@ const initialState = {
     voice_locale:"EN",
 }
 
-export default function chapter(state = initialState, action) {
+var LoadState = function(){
+    const previousState = localStorage.getItem('react-bible-state');
+    if(previousState  && previousState !== "undefined")    {
+      var stateObj = JSON.parse(previousState);
+      initialState = stateObj;
+    }
+}
+LoadState();
+
+var SaveState = function(state){
+  const serializedState = JSON.stringify(state);
+  localStorage.setItem('react-bible-state', serializedState);
+}
+
+export default function ReactBibleReducer(state = initialState, action) {
+
+
+  var newState = state;
+
   switch (action.type) {
     case GOTO_BOOK:
       if(action.text==="-1"){
         return state;
       }
-      return Object.assign({}, state, {
+      newState = Object.assign({}, state, {
         book: action.text,
         chapter: "0"
-      })
+      });
+      break;
     case GOTO_CHAPTER:
       if(action.text==="-1"){
         return state;
       }
-      return Object.assign({}, state, {
+      newState = Object.assign({}, state, {
         chapter: action.text
-      })
+      });
+      break;
     case SET_TEXT_LOCALE:
-      return Object.assign({}, state, {
+      newState = Object.assign({}, state, {
         text_locale: action.text
-      })
+      });
+      break;
     case SET_VOICE_LOCALE:
-      return Object.assign({}, state, {
+      newState = Object.assign({}, state, {
         voice_locale: action.text
-      })
+      });
+      break;
     case SET_AUDIO:
-      return Object.assign({}, state, {
+      newState = Object.assign({}, state, {
         audio: action.text
-      })
+      });
+      break;
     default:
       return state
   }
+
+  SaveState(newState);
+  return newState;
+
 }

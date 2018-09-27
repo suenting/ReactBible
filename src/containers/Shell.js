@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 //icons
 import MenuIcon from '@material-ui/icons/Menu';
-
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Book from '../components/Book'
 import Navigation from '../components/Navigation'
 
@@ -57,7 +57,16 @@ class Shell extends React.Component {
                             paper: classes.drawerPaper,
                         }}
                     >
-                    <div className={classes.drawerHeader}></div>
+                    <div className={classes.drawerHeader}>
+                    <IconButton
+                                color="inherit"
+                                aria-label="Close drawer"
+                                onClick={this.toggleDrawer}
+                                className={classNames(classes.menuButton)}
+                            >
+                                <ChevronLeftIcon  />
+                    </IconButton>                    
+                    </div>
                     <Navigation actions={actions} />
                     </Drawer>
                     <main
