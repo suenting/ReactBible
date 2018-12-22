@@ -15,6 +15,7 @@ import Divider from '@material-ui/core/Divider';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import LanguageIcon from '@material-ui/icons/Language';
 import VoiceIcon from '@material-ui/icons/RecordVoiceOver';
+import GroupIcon from '@material-ui/icons/Group';
 
 import MuteIcon from '@material-ui/icons/VolumeMute'
 import UnMuteIcon from '@material-ui/icons/VolumeUp'
@@ -39,6 +40,10 @@ class Navigation extends Component {
     }
     onChangeAudioEnable(enabled){
         this.props.actions.setAudio(enabled);
+    }
+
+    toggleTogetherJS(event){
+        window.TogetherJS();
     }
 
     render() {
@@ -109,6 +114,19 @@ class Navigation extends Component {
                     (<button id="unmute" className="btn btn-outline-secondary" onClick={(event)=>{this.onChangeAudioEnable(true)}}><MuteIcon></MuteIcon>UnMute</button>)
                     }
                     </center>
+                    <br />
+                    <Divider />
+                    <ListItem>
+                        <ListItemIcon><GroupIcon/></ListItemIcon>
+                        <ListItemText>
+                        Read Together
+                        </ListItemText>
+                    </ListItem>
+                    <center>
+                        <button className="btn btn-outline-primary" onClick={(event)=>{this.toggleTogetherJS(event)}}>Toggle TogetherJS</button>
+                    </center>
+                    <br />
+                    <Divider />
                 </List>
             </div>
         )
