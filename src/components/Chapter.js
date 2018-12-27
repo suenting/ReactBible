@@ -31,7 +31,7 @@ class Chapter extends Component {
         var currentBook = findBook(enB, book);
         var currentChapter = currentBook.chapters[chapter];
         var ListVerse = function (X, index) {
-            return <Verse key={X} idx={index}>{X}</Verse>;
+            return <Verse key={index+X} idx={index}>{X}</Verse>;
         };
         var chapterDisplay = parseInt(chapter, 10) + 1;
         return (
