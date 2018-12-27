@@ -16,6 +16,7 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import LanguageIcon from '@material-ui/icons/Language';
 import VoiceIcon from '@material-ui/icons/RecordVoiceOver';
 import GroupIcon from '@material-ui/icons/Group';
+import CodeIcon from '@material-ui/icons/Code';
 
 import MuteIcon from '@material-ui/icons/VolumeMute'
 import UnMuteIcon from '@material-ui/icons/VolumeUp'
@@ -105,9 +106,6 @@ class Navigation extends Component {
                             <option value='ZH'>Chinese</option>
                         </select>
                     </ListItem>
-                    <ListItem>
-                        powered by (responsivevoice.org)
-                    </ListItem>
                     <center>
                     { audio?
                     (<button id="mute" className="btn btn-outline-primary" onClick={(event)=>{this.onChangeAudioEnable(false)}}><UnMuteIcon></UnMuteIcon>Mute</button>):
@@ -127,6 +125,12 @@ class Navigation extends Component {
                     </center>
                     <br />
                     <Divider />
+                    <ListItem>
+                        <ListItemIcon><CodeIcon/></ListItemIcon>
+                        <ListItemText>
+                            <a className="btn btn-outline-primary" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
+                        </ListItemText>
+                    </ListItem>                    
                 </List>
             </div>
         )
