@@ -17,6 +17,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import VoiceIcon from '@material-ui/icons/RecordVoiceOver';
 import GroupIcon from '@material-ui/icons/Group';
 import CodeIcon from '@material-ui/icons/Code';
+import BrightIcon from '@material-ui/icons/BrightnessMedium';
 
 import MuteIcon from '@material-ui/icons/VolumeMute'
 import UnMuteIcon from '@material-ui/icons/VolumeUp'
@@ -42,13 +43,15 @@ class Navigation extends Component {
     onChangeAudioEnable(enabled){
         this.props.actions.setAudio(enabled);
     }
-
+    onChangeTheme(theme){
+        this.props.actions.setTheme(theme);
+    }
     toggleTogetherJS(event){
         window.TogetherJS();
     }
 
     render() {
-        const { book, chapter, text, voice, audio } = this.props;
+        const { book, chapter, text, voice, audio, theme } = this.props;
         var b = bible;
         var currentBook = findBook(b, book);
         var chapterList = [];
@@ -115,6 +118,17 @@ class Navigation extends Component {
                     <br />
                     <Divider />
                     <ListItem>
+                        <ListItemIcon><BrightIcon/></ListItemIcon>
+                        <ListItemText>
+                            {
+                                theme==='dark'?
+                                (<button className="btn btn-outline-primary" onClick={(event)=>{this.onChangeTheme('light')}}>Toggle Theme</button>):
+                                (<button className="btn btn-outline-primary" onClick={(event)=>{this.onChangeTheme('dark')}}>Toggle Theme</button>)
+                            }
+                        </ListItemText>
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
                         <ListItemIcon><GroupIcon/></ListItemIcon>
                         <ListItemText>
                         Read Together
@@ -143,6 +157,7 @@ function mapStateToProps(state) {
             book: state.ReactBibleReducer.book,
             text: state.ReactBibleReducer.text_locale,
             audio: state.ReactBibleReducer.audio,
-            voice: state.ReactBibleReducer.voice_locale};
+            voice: state.ReactBibleReducer.voice_locale,
+            theme: state.ReactBibleReducer.theme};
 }
 export default connect(mapStateToProps)(Navigation)

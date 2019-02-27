@@ -10,6 +10,7 @@ describe('bible reducer', () => {
                 audio: true,
                 text_locale: "EN",
                 voice_locale: "EN",
+                theme: "light",
             }
         )
     })
@@ -65,6 +66,17 @@ describe('bible reducer', () => {
             })
         ).toEqual({
             audio: false
+        })
+    })  
+
+    it('should handle SET_THEME', () => {
+        expect(
+            reducer([], {
+                type: types.SET_THEME,
+                text: "dark"
+            })
+        ).toEqual({
+            theme: "dark"
         })
     })    
 })

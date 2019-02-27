@@ -6,7 +6,6 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 
 //icons
 import MenuIcon from '@material-ui/icons/Menu';
@@ -35,14 +34,7 @@ class Shell extends React.Component {
                         })}
                     >
                         <Toolbar disableGutters={!this.state.drawer}>
-                            <IconButton
-                                color="inherit"
-                                aria-label="Open drawer"
-                                onClick={this.toggleDrawer}
-                                className={classNames(classes.menuButton)}
-                            >
-                                <MenuIcon />
-                            </IconButton>
+                            <MenuIcon className={classes.menuButton} onClick={this.toggleDrawer} />
                             <Typography variant="title" color="inherit" noWrap>
                                 React Bible
                             </Typography>
@@ -58,14 +50,7 @@ class Shell extends React.Component {
                         }}
                     >
                     <div className={classes.drawerHeader}>
-                    <IconButton
-                                color="inherit"
-                                aria-label="Close drawer"
-                                onClick={this.toggleDrawer}
-                                className={classNames(classes.menuButton)}
-                            >
-                                <ChevronLeftIcon  />
-                    </IconButton>                    
+                    <ChevronLeftIcon className={classNames(classes.menuButton)} onClick={this.toggleDrawer} />                  
                     </div>
                     <Navigation actions={actions} />
                     </Drawer>
