@@ -8,6 +8,10 @@ class Verse extends Component {
 
 
     render() {
+        var htmlDecode = function(input){
+            var doc = new DOMParser().parseFromString(input, "text/html");
+            return doc.documentElement.textContent;
+        }
         var speakVerse = function(line, voice, audio){
             
             if(!audio)
@@ -46,7 +50,7 @@ class Verse extends Component {
         switch(text)
         {
             case 'EN':
-                renderText = enCurrentChapter[verseDisplay-1];
+                renderText = htmlDecode(enCurrentChapter[verseDisplay-1]);
             break;
             case 'ZH':
                 renderText = zhCurrentChapter[verseDisplay-1];
@@ -58,7 +62,7 @@ class Verse extends Component {
         switch(voice)
         {
             case 'EN':
-                renderVoice = enCurrentChapter[verseDisplay-1];
+                renderVoice = htmlDecode(enCurrentChapter[verseDisplay-1]);
             break;
             case 'ZH':
                 renderVoice = zhCurrentChapter[verseDisplay-1];
