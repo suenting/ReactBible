@@ -1,4 +1,4 @@
-import { GOTO_BOOK, GOTO_CHAPTER, SET_AUDIO, SET_TEXT_LOCALE, SET_VOICE_LOCALE, SET_THEME } from '../constants/ActionTypes'
+import { GOTO_BOOK, GOTO_CHAPTER, SET_AUDIO, SET_TEXT_LOCALE, SET_VOICE_LOCALE, SET_THEME, SET_TOOLTIP_LOCALE } from '../constants/ActionTypes'
 
 // default state
 var initialState = {
@@ -7,6 +7,7 @@ var initialState = {
     audio:true,
     text_locale:"EN",
     voice_locale:"EN",
+    tooltip_locale: "NA",
     theme:"light"
 }
 
@@ -50,6 +51,11 @@ export default function ReactBibleReducer(state = initialState, action) {
         text_locale: action.text
       });
       break;
+    case SET_TOOLTIP_LOCALE:
+      newState = Object.assign({}, state, {
+        tooltip_locale: action.text
+      });
+      break;      
     case SET_VOICE_LOCALE:
       newState = Object.assign({}, state, {
         voice_locale: action.text

@@ -11,6 +11,7 @@ describe('bible reducer', () => {
                 text_locale: "EN",
                 voice_locale: "EN",
                 theme: "light",
+                tooltip_locale: "NA",
             }
         )
     })
@@ -57,7 +58,18 @@ describe('bible reducer', () => {
             voice_locale: "EN"
         })
     })
-    
+
+    it('should handle SET_TOOLTIP_LOCALE', () => {
+        expect(
+            reducer([], {
+                type: types.SET_TOOLTIP_LOCALE,
+                text: 'EN'
+            })
+        ).toEqual({
+            tooltip_locale: "EN"
+        })
+    })
+
     it('should handle SET_AUDIO', () => {
         expect(
             reducer([], {

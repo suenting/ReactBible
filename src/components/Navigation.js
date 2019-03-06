@@ -18,6 +18,7 @@ import VoiceIcon from '@material-ui/icons/RecordVoiceOver';
 import GroupIcon from '@material-ui/icons/Group';
 import CodeIcon from '@material-ui/icons/Code';
 import BrightIcon from '@material-ui/icons/BrightnessMedium';
+import ToolTipIcon from '@material-ui/icons/FindReplace';
 
 import MuteIcon from '@material-ui/icons/VolumeMute'
 import UnMuteIcon from '@material-ui/icons/VolumeUp'
@@ -37,6 +38,9 @@ class Navigation extends Component {
     onChangeText(event) {
         this.props.actions.setTextLocale(event.target.value);
     }
+    onChangeToolTip(event) {
+        this.props.actions.setToolTipLocale(event.target.value);
+    }    
     onChangeVoice(event) {
         this.props.actions.setVoiceLocale(event.target.value);
     }
@@ -51,7 +55,7 @@ class Navigation extends Component {
     }
 
     render() {
-        const { book, chapter, text, voice, audio, theme } = this.props;
+        const { book, chapter, text, voice, audio, theme, tooltip } = this.props;
         var b = bible;
         var currentBook = findBook(b, book);
         var chapterList = [];
@@ -140,6 +144,17 @@ class Navigation extends Component {
                     <br />
                     <Divider />
                     <ListItem>
+                        <ListItemIcon><ToolTipIcon/></ListItemIcon>
+                        <ListItemText>
+                        <select id="navToolTip" className="form-control" value={tooltip} onChange={(event)=>{this.onChangeToolTip(event)}}>
+                            <option value='NA'>N/A</option>
+                            <option value='EN'>English</option>
+                            <option value='ZH'>Chinese</option>
+                        </select>
+                        </ListItemText>
+                    </ListItem>                    
+                    <Divider />
+                    <ListItem>
                         <ListItemIcon><CodeIcon/></ListItemIcon>
                         <ListItemText>
                             <a className="btn btn-outline-primary" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
@@ -156,6 +171,7 @@ function mapStateToProps(state) {
             chapter: state.ReactBibleReducer.chapter,
             book: state.ReactBibleReducer.book,
             text: state.ReactBibleReducer.text_locale,
+            tooltip: state.ReactBibleReducer.tooltip_locale,
             audio: state.ReactBibleReducer.audio,
             voice: state.ReactBibleReducer.voice_locale,
             theme: state.ReactBibleReducer.theme};

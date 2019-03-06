@@ -32,7 +32,7 @@ class Verse extends Component {
             }
             /*eslint-enable no-undef*/
         }
-        const { idx, chapter, book, text, voice, audio } = this.props;
+        const { idx, chapter, book, text, voice, audio, tooltip } = this.props;
         var enB = enBible;
         var enCurrentBook = findBook(enB, book);
         var enCurrentChapter = enCurrentBook.chapters[chapter];
@@ -46,33 +46,38 @@ class Verse extends Component {
 
         var renderText = "";
         var renderVoice = "";
+        var renderTooltip = "";
 
-        switch(text)
-        {
-            case 'EN':
-                renderText = htmlDecode(enCurrentChapter[verseDisplay-1]);
-            break;
-            case 'ZH':
-                renderText = zhCurrentChapter[verseDisplay-1];
-            break;
-            default:
-            break;
+        var getLocaleText = function(locale){
+            switch(locale)
+            {
+                case 'EN':
+                   return htmlDecode(enCurrentChapter[verseDisplay-1]);
+                case 'ZH':
+                   return zhCurrentChapter[verseDisplay-1];
+                default:
+                    return '';
+            }            
         }
+        renderText = getLocaleText(text);
+        renderVoice = getLocaleText(voice);
+        renderTooltip = getLocaleText(tooltip);
 
-        switch(voice)
+
+        if('NA' === tooltip)
         {
-            case 'EN':
-                renderVoice = htmlDecode(enCurrentChapter[verseDisplay-1]);
-            break;
-            case 'ZH':
-                renderVoice = zhCurrentChapter[verseDisplay-1];
-            break;
-            default:
-            break;
+            return (
+                <div className="Verse" onClick={() => speakVerse(renderVoice, voice, audio)}> ({chapterDisplay},{verseDisplay}) {renderText}</div>
+            )
         }
-        return (
-            <div className="Verse" onClick={() => speakVerse(renderVoice, voice, audio)}> ({chapterDisplay},{verseDisplay}) {renderText}</div>
-        )
+        else{
+            return (
+                <div className="VerseTooltip" onClick={() => speakVerse(renderVoice, voice, audio)}> 
+                    ({chapterDisplay},{verseDisplay}) {renderText}
+                    <span className="tooltiptext">({chapterDisplay},{verseDisplay}) {renderTooltip}</span>
+                </div>
+            )            
+        }
     }
 }
 
@@ -81,6 +86,7 @@ function mapStateToProps(state) {
             chapter: state.ReactBibleReducer.chapter,
             book: state.ReactBibleReducer.book,
             text: state.ReactBibleReducer.text_locale,
+            tooltip: state.ReactBibleReducer.tooltip_locale,
             audio: state.ReactBibleReducer.audio,
             voice: state.ReactBibleReducer.voice_locale};
 }
