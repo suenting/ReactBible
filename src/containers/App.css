@@ -22,7 +22,11 @@
   font-size: large;
 }
 
-.Dark *{
+.Dark,.Dark *{
   background-color: #222!important;
   color: white!important;
+}
+
+.Dark{
+  min-height: 100vh;
 }
