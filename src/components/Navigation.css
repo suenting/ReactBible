@@ -1,5 +1,11 @@
 
-
+@media (max-height:800px)  {
+    .Navigation{
+        max-height: 90vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+}
 .BookNavigation
 {
     min-width:200px;
