@@ -113,12 +113,20 @@ class Navigation extends Component {
                             <option value='ZH'>Chinese</option>
                         </select>
                     </ListItem>
-                    <center>
-                    { audio?
-                    (<button id="mute" className="btn btn-outline-primary" onClick={(event)=>{this.onChangeAudioEnable(false)}}><UnMuteIcon></UnMuteIcon>Mute</button>):
-                    (<button id="unmute" className="btn btn-outline-secondary" onClick={(event)=>{this.onChangeAudioEnable(true)}}><MuteIcon></MuteIcon>UnMute</button>)
-                    }
-                    </center>
+                    <ListItem>
+                        <ListItemIcon>
+                        { audio?
+                            (<UnMuteIcon></UnMuteIcon>):
+                            (<MuteIcon></MuteIcon>)
+                        }
+                        </ListItemIcon>
+                        <ListItemText>
+                        { audio?
+                            (<button id="mute" className="navbtn btn btn-outline-primary" onClick={(event)=>{this.onChangeAudioEnable(false)}}>Mute</button>):
+                            (<button id="unmute" className="navbtn btn btn-outline-secondary" onClick={(event)=>{this.onChangeAudioEnable(true)}}>UnMute</button>)
+                        }
+                        </ListItemText>                        
+                    </ListItem>
                     <br />
                     <Divider />
                     <ListItem>
@@ -126,8 +134,8 @@ class Navigation extends Component {
                         <ListItemText>
                             {
                                 theme==='dark'?
-                                (<button className="btn btn-outline-primary" onClick={(event)=>{this.onChangeTheme('light')}}>Toggle Theme</button>):
-                                (<button className="btn btn-outline-primary" onClick={(event)=>{this.onChangeTheme('dark')}}>Toggle Theme</button>)
+                                (<button id="toggletheme" className="navbtn btn btn-outline-primary" onClick={(event)=>{this.onChangeTheme('light')}}>Toggle Theme</button>):
+                                (<button id="toggletheme" className="navbtn btn btn-outline-primary" onClick={(event)=>{this.onChangeTheme('dark')}}>Toggle Theme</button>)
                             }
                         </ListItemText>
                     </ListItem>
@@ -135,13 +143,9 @@ class Navigation extends Component {
                     <ListItem>
                         <ListItemIcon><GroupIcon/></ListItemIcon>
                         <ListItemText>
-                        Read Together
+                        <button className="navbtn btn btn-outline-primary" onClick={(event)=>{this.toggleTogetherJS(event)}}>Read Together</button>
                         </ListItemText>
                     </ListItem>
-                    <center>
-                        <button className="btn btn-outline-primary" onClick={(event)=>{this.toggleTogetherJS(event)}}>Toggle TogetherJS</button>
-                    </center>
-                    <br />
                     <Divider />
                     <ListItem>
                         <ListItemIcon><ToolTipIcon/></ListItemIcon>
@@ -157,7 +161,7 @@ class Navigation extends Component {
                     <ListItem>
                         <ListItemIcon><CodeIcon/></ListItemIcon>
                         <ListItemText>
-                            <a className="btn btn-outline-primary" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
+                            <a className="navbtn btn btn-outline-primary" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
                         </ListItemText>
                     </ListItem>                    
                 </List>

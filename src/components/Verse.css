@@ -15,8 +15,8 @@
     visibility: hidden;
     background-color: black!important;
     color: #fff!important;
-    text-align: center;
-    padding: 5px 0;
+    text-align: left;
+    padding: 5px;
     border-radius: 6px;
    
     /* Position the tooltip text - see examples below! */
@@ -33,7 +33,7 @@
     width: 100%;
     top: 100%;
     left: 0%; 
-    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+    margin-left: 0px; /* Use half of the width (120/2 = 60), to center the tooltip */
   }
 
   .VerseTooltip .tooltiptext::after {
