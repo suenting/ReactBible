@@ -20,15 +20,30 @@ class Book extends Component {
         };
     }
 
+    isLocaleLoaded(locale){
+        switch(locale){
+            case 'EN':
+                return this.state.enBible.length>0;
+            case 'ZH':
+                return this.state.zhBible.length>0;
+            default:
+                return true;
+        }
+    }
+
     fetchBibleJson(){
+        let promiseList = [];
         // always load english
-        let enPromise = fetch('./en_kjv.json')
+        if(!this.isLocaleLoaded("EN")){
+            let enPromise = fetch('./en_kjv.json')
             .then(result => result.json())
             .then(result => {
                 this.setState({
                     enBible:result
                 })
             });
+            promiseList.push(enPromise);
+        }
 
         // only load other locales if used
         const HasLocale = function(self, locale){
@@ -40,21 +55,28 @@ class Book extends Component {
                 }
             return false;
         }
-        let zhPromise = Promise.resolve('skip');
-        if(HasLocale(this, 'ZH')){
-            zhPromise = fetch('./zh_ncv.json')
+
+        // chinese
+        if(HasLocale(this, 'ZH') && !this.isLocaleLoaded("ZH")){
+            let zhPromise = fetch('./zh_ncv.json')
             .then(result => result.json())
             .then(result => {
                 this.setState({
                     zhBible:result
                 })
             });
+            promiseList.push(zhPromise);
         }
 
-        Promise.all([enPromise, zhPromise]).then(result => {
+        Promise.all(promiseList).then(result => {
             this.setState({
                 isLoaded: true
             });
+        })
+        .catch(error=>{
+            // retry on error
+            setTimeout(500);
+            this.fetchBibleJson();
         });
     }
 
@@ -63,14 +85,21 @@ class Book extends Component {
     }
     componentDidUpdate(prevProps) {
         if( 
-            this.props.text !==prevProps.text || 
-            this.props.voice !==prevProps.voice ||
-            this.props.tooltip !==prevProps.tooltip ){
-                this.setState({
-                    isLoaded: false
-                });
-                this.fetchBibleJson();
+            this.props.text ===prevProps.text && 
+            this.props.voice ===prevProps.voice &&
+            this.props.tooltip ===prevProps.tooltip ){
+                return;
             }
+        if(
+            this.isLocaleLoaded(this.props.text) &&
+            this.isLocaleLoaded(this.props.voice) &&
+            this.isLocaleLoaded(this.props.tooltip)){
+                return;
+            }
+            this.setState({
+                isLoaded: false
+            });
+            this.fetchBibleJson();
     }
 
     render() {
