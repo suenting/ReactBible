@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import bible from '../en_kjv.json'
 import {findBook} from '../utils/common'
 import './Navigation.css';
 
@@ -24,6 +23,26 @@ import MuteIcon from '@material-ui/icons/VolumeMute'
 import UnMuteIcon from '@material-ui/icons/VolumeUp'
 
 class Navigation extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            enBible:[],
+            isLoaded:false,
+        };
+    }
+    componentDidMount(){
+        // todo: consider sliming this json file down
+        fetch('./en_kjv.json')
+        .then(result=>result.json())
+        .then(result=>{
+            this.setState({
+                enBible: result,
+                isLoaded: true
+            });
+        });
+    }    
+
     static propTypes = {
         actions: PropTypes.object.isRequired
     }
@@ -55,8 +74,11 @@ class Navigation extends Component {
     }
 
     render() {
+        if(!this.state.isLoaded){
+            return (<div></div>);
+        }
         const { book, chapter, text, voice, audio, theme, tooltip } = this.props;
-        var b = bible;
+        var b = this.state.enBible;
         var currentBook = findBook(b, book);
         var chapterList = [];
         for(var it = 0; it<currentBook.chapters.length; ++it){

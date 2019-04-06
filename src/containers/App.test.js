@@ -3,26 +3,15 @@ import ReactDOM from 'react-dom';
 import App from './App';
 
 import {createStore} from 'redux';
-import { Provider } from 'react-redux'
-import reducer from '../reducers'
+import { Provider } from 'react-redux';
+import reducer from '../reducers';
 import { ExpansionPanelActions } from '@material-ui/core';
 
-// ui level testing
+import bibleMock from '../../public/en_kjv.json';
 
 // basic test
 it('renders without crashing', () => {
-  const div = document.createElement('div');
-  const store = createStore(reducer);
-  ReactDOM.render(
-      <Provider store={store}>
-          <App />
-      </Provider>
-      , div);
-});
-
-
-// test navigation
-it('is able to toggle mute', () => {
+  fetch.mockResponse(JSON.stringify(bibleMock));
   const div = document.createElement('div');
   document.body.appendChild(div);
   const store = createStore(reducer);
@@ -31,6 +20,12 @@ it('is able to toggle mute', () => {
           <App />
       </Provider>
       , div);
+  setTimeout(10);
+});
+
+
+// test navigation
+it('is able to toggle mute', () => {
   var mute = document.getElementById('mute');
   mute.click();
 

@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import enBible from '../en_kjv.json'
 import './Chapter.css';
 import Verse from './Verse'
 import { findBook, findNextBook } from '../utils/common'
 
 class Chapter extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            enBible: props.enBible,
+            zhBible: props.zhBible
+        }
+    }
+
     static propTypes = {
         actions: PropTypes.object.isRequired
     }
@@ -27,11 +35,12 @@ class Chapter extends Component {
     }
     render() {
         const { chapter, book } = this.props;
-        var enB = enBible;
+        var enB = this.state.enBible;
+        var zhB = this.state.zhBible;
         var currentBook = findBook(enB, book);
         var currentChapter = currentBook.chapters[chapter];
         var ListVerse = function (X, index) {
-            return <Verse key={index+X} idx={index}>{X}</Verse>;
+            return <Verse key={index+X} idx={index} enBible={enB} zhBible={zhB} >{X}</Verse>;
         };
         var chapterDisplay = parseInt(chapter, 10) + 1;
         return (

@@ -7,7 +7,7 @@
 /* Tooltip container */
 .VerseTooltip {
     position: relative;
-    display: inline-block;
+    display: block;
   }
   
   /* Tooltip text */

@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {findBook} from '../utils/common'
-import enBible from '../en_kjv.json'
-import zhBible from '../zh_ncv.json'
 import './Verse.css';
 class Verse extends Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            enBible: props.enBible,
+            zhBible: props.zhBible
+        }
+    }
 
     render() {
         var htmlDecode = function(input){
@@ -33,14 +38,16 @@ class Verse extends Component {
             /*eslint-enable no-undef*/
         }
         const { idx, chapter, book, text, voice, audio, tooltip } = this.props;
-        var enB = enBible;
+        var enB = this.state.enBible;
         var enCurrentBook = findBook(enB, book);
         var enCurrentChapter = enCurrentBook.chapters[chapter];
 
-        var zhB = zhBible;
-        var zhCurrentBook = findBook(zhB, book);
-        var zhCurrentChapter = zhCurrentBook.chapters[chapter];
-
+        var zhB = this.state.zhBible;
+        if(zhB.length>0){
+            var zhCurrentBook = findBook(zhB, book);
+            var zhCurrentChapter = zhCurrentBook.chapters[chapter];
+        }
+        
         var chapterDisplay = parseInt(chapter,10)+1;
         var verseDisplay = parseInt(idx,10)+1;
 
