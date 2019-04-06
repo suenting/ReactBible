@@ -5,7 +5,10 @@ import Chapter from './Chapter'
 import { findBook } from '../utils/common'
 class Book extends Component {
     static propTypes = {
-        actions: PropTypes.object.isRequired
+        actions: PropTypes.object.isRequired,
+        text: PropTypes.string.isRequired,
+        tooltip: PropTypes.string.isRequired,
+        voice: PropTypes.string.isRequired,
     }
 
     constructor(props) {
@@ -17,20 +20,57 @@ class Book extends Component {
         };
     }
 
-    componentDidMount() {
-        let enPromise = fetch('./en_kjv.json').then(result => result.json());
+    fetchBibleJson(){
+        // always load english
+        let enPromise = fetch('./en_kjv.json')
+            .then(result => result.json())
+            .then(result => {
+                this.setState({
+                    enBible:result
+                })
+            });
 
-        // todo consider lazy loading
-        let zhPromise = fetch('./zh_ncv.json').then(result => result.json());
+        // only load other locales if used
+        const HasLocale = function(self, locale){
+            if( 
+                self.props.text === locale || 
+                self.props.voice === locale ||
+                self.props.tooltip === locale ){
+                    return true;
+                }
+            return false;
+        }
+        let zhPromise = Promise.resolve('skip');
+        if(HasLocale(this, 'ZH')){
+            zhPromise = fetch('./zh_ncv.json')
+            .then(result => result.json())
+            .then(result => {
+                this.setState({
+                    zhBible:result
+                })
+            });
+        }
 
         Promise.all([enPromise, zhPromise]).then(result => {
-            const [enBible, zhBible] = result;
             this.setState({
-                enBible: enBible,
-                zhBible: zhBible,
                 isLoaded: true
             });
         });
+    }
+
+    componentDidMount() {
+        this.fetchBibleJson();
+    }
+    componentDidUpdate(prevProps) {
+        if( 
+            this.props.text !==prevProps.text || 
+            this.props.voice !==prevProps.voice ||
+            this.props.tooltip !==prevProps.tooltip ){
+                this.setState({
+                    isLoaded: false
+                });
+                this.fetchBibleJson();
+            }
     }
 
     render() {
@@ -58,9 +98,6 @@ class Book extends Component {
 function mapStateToProps(state) {
     return {
         book: state.ReactBibleReducer.book,
-        text: state.ReactBibleReducer.text_locale,
-        tooltip: state.ReactBibleReducer.tooltip_locale,
-        voice: state.ReactBibleReducer.voice_locale
     };
 }
 export default connect(mapStateToProps)(Book)

@@ -6,6 +6,7 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { connect } from 'react-redux'
 
 //icons
 import MenuIcon from '@material-ui/icons/Menu';
@@ -23,7 +24,9 @@ class Shell extends React.Component {
     };
 
     render() {
+
         const { actions, classes } = this.props;
+        const { text,tooltip,voice } = this.props;
         return (
             <div className={classes.root}>
                 <div className={classes.appFrame}>
@@ -62,7 +65,7 @@ class Shell extends React.Component {
                         })}
                     >
                     <div className={classes.drawerHeader}></div>
-                    <Book actions={actions} />
+                    <Book actions={actions} text={text} tooltip={tooltip} voice={voice} />
                     </main>
                 </div>
             </div>
@@ -158,4 +161,12 @@ const styles = theme => ({
     }
 });
 
-export default withStyles(styles, { withTheme: true })(Shell);
+function mapStateToProps(state) {
+    return {
+        text: state.ReactBibleReducer.text_locale,
+        tooltip: state.ReactBibleReducer.tooltip_locale,
+        voice: state.ReactBibleReducer.voice_locale
+    };
+}
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Shell));

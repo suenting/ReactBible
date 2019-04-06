@@ -42,6 +42,7 @@ class Verse extends Component {
         var enCurrentBook = findBook(enB, book);
         var enCurrentChapter = enCurrentBook.chapters[chapter];
 
+        // note other languages may not always be loaded if not used
         var zhB = this.state.zhBible;
         if(zhB.length>0){
             var zhCurrentBook = findBook(zhB, book);
