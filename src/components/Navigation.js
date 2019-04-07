@@ -31,7 +31,8 @@ class Navigation extends Component {
             isLoaded:false,
         };
     }
-    componentDidMount(){
+
+    loadBible(){
         // todo: consider sliming this json file down
         fetch('./en_kjv.json')
         .then(result=>result.json())
@@ -40,7 +41,14 @@ class Navigation extends Component {
                 enBible: result,
                 isLoaded: true
             });
+        })
+        .catch(error=>{
+            setTimeout(this.loadBible,500);
         });
+    }
+
+    componentDidMount(){
+        this.loadBible();
     }    
 
     static propTypes = {

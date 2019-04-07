@@ -75,8 +75,7 @@ class Book extends Component {
         })
         .catch(error=>{
             // retry on error
-            setTimeout(500);
-            this.fetchBibleJson();
+            setTimeout(this.fetchBibleJson,500);
         });
     }
 
