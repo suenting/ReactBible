@@ -1,0 +1,28 @@
+Update service worker
+- precache files to localpath
+- add cache stratagy localcache->then request if failed
+/**
+}),
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+      caches.open('reactbible-dynamic').then(function(cache) {
+        return cache.match(event.request).then(function (response) {
+          return response || fetch(event.request).then(function(response) {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+        });
+      })
+    );
+});
+**/
+
+asset-manifest.json
+- local paths
+
+index.html
+- local paths
+- var TogetherJSConfig_cloneClicks = true;
+
+main.js
+- service-worker points to local path

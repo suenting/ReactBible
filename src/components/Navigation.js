@@ -191,7 +191,7 @@ class Navigation extends Component {
                     <ListItem>
                         <ListItemIcon><CodeIcon/></ListItemIcon>
                         <ListItemText>
-                            <a className="navbtn btn btn-outline-primary" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
+                            <a className="navbtn btn btn-outline-primary" rel="noreferrer" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
                         </ListItemText>
                     </ListItem>                    
                 </List>
