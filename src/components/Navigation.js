@@ -43,7 +43,7 @@ class Navigation extends Component {
             });
         })
         .catch(error=>{
-            setTimeout(this.loadBible,500);
+            setTimeout(()=>{this.loadBible()},500);
         });
     }
 
