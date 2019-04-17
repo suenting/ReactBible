@@ -6,6 +6,4 @@ example build on git-site: <a href="https://suenting.github.io/ReactBible/index.
 
 <br />
 <br />
-Voice Powered by responsivevoice.org
-<br />
 Co-Read Powered by togetherjs.com

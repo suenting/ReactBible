@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import {findBook} from '../utils/common'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {findBook} from '../utils/common';
 import './Navigation.css';
+import TTS from '../utils/tts';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -19,8 +20,8 @@ import CodeIcon from '@material-ui/icons/Code';
 import BrightIcon from '@material-ui/icons/BrightnessMedium';
 import ToolTipIcon from '@material-ui/icons/FindReplace';
 
-import MuteIcon from '@material-ui/icons/VolumeMute'
-import UnMuteIcon from '@material-ui/icons/VolumeUp'
+import MuteIcon from '@material-ui/icons/VolumeMute';
+import UnMuteIcon from '@material-ui/icons/VolumeUp';
 
 class Navigation extends Component {
 
@@ -49,6 +50,7 @@ class Navigation extends Component {
 
     componentDidMount(){
         this.loadBible();
+        TTS.fetchVoices();
     }    
 
     static propTypes = {
@@ -70,9 +72,11 @@ class Navigation extends Component {
     }    
     onChangeVoice(event) {
         this.props.actions.setVoiceLocale(event.target.value);
+        TTS.cancel();
     }
     onChangeAudioEnable(enabled){
         this.props.actions.setAudio(enabled);
+        TTS.cancel();
     }
     onChangeTheme(theme){
         this.props.actions.setTheme(theme);
@@ -191,7 +195,7 @@ class Navigation extends Component {
                     <ListItem>
                         <ListItemIcon><CodeIcon/></ListItemIcon>
                         <ListItemText>
-                            <a className="navbtn btn btn-outline-primary" rel="noreferrer" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
+                            <a className="navbtn btn btn-outline-primary" rel="noopener noreferrer" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
                         </ListItemText>
                     </ListItem>                    
                 </List>

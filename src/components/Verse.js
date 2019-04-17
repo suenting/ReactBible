@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {findBook} from '../utils/common'
 import './Verse.css';
+import TTS from '../utils/tts'
+
 class Verse extends Component {
 
     constructor(props){
@@ -13,29 +15,39 @@ class Verse extends Component {
     }
 
     render() {
-        var htmlDecode = function(input){
+        let htmlDecode = function(input){
             var doc = new DOMParser().parseFromString(input, "text/html");
             return doc.documentElement.textContent;
         }
-        var speakVerse = function(line, voice, audio){
-            
+        let getLocaleText = function(locale, verseDisplay){
+            switch(locale)
+            {
+                case 'EN':
+                   return htmlDecode(enCurrentChapter[verseDisplay-1]);
+                case 'ZH':
+                   return zhCurrentChapter[verseDisplay-1];
+                default:
+                    return '';
+            }            
+        }        
+        let speakVerse = function(voice, audio, idx, voiceChapter){
             if(!audio)
             {
                 return;
             }
-            /*eslint-disable no-undef*/
-            switch(voice)
-            {
-                case "EN":
-                    responsiveVoice.speak(line, "UK English Female");
-                break;
-                case "ZH":
-                    responsiveVoice.speak(line, "Chinese Female");
-                break;
-                default:
-                break;
+            if(TTS.isSpeeaking()){
+                TTS.cancel();
+                return;
             }
-            /*eslint-enable no-undef*/
+            TTS.setVoice(voice);
+            let line = getLocaleText(voice,idx+1);
+            if(idx+1<voiceChapter.length){
+                let callback = speakVerse.bind(this,voice, audio,idx+1,voiceChapter);
+                TTS.speak(line, callback);
+            }
+            else{
+                TTS.speak(line);
+            }
         }
         const { idx, chapter, book, text, voice, audio, tooltip } = this.props;
         var enB = this.state.enBible;
@@ -53,34 +65,33 @@ class Verse extends Component {
         var verseDisplay = parseInt(idx,10)+1;
 
         var renderText = "";
-        var renderVoice = "";
         var renderTooltip = "";
 
-        var getLocaleText = function(locale){
-            switch(locale)
-            {
-                case 'EN':
-                   return htmlDecode(enCurrentChapter[verseDisplay-1]);
-                case 'ZH':
-                   return zhCurrentChapter[verseDisplay-1];
-                default:
-                    return '';
-            }            
+        renderText = getLocaleText(text, verseDisplay);
+        renderTooltip = getLocaleText(tooltip, verseDisplay);
+
+        let voiceChapter = [];
+        switch(voice){
+            case 'EN':
+                voiceChapter = enCurrentChapter;
+                break;
+            case 'ZH':
+                voiceChapter = zhCurrentChapter;
+                break;
+            default:
+                break;
         }
-        renderText = getLocaleText(text);
-        renderVoice = getLocaleText(voice);
-        renderTooltip = getLocaleText(tooltip);
 
 
         if('NA' === tooltip)
         {
             return (
-                <div className="Verse" onClick={() => speakVerse(renderVoice, voice, audio)}> ({chapterDisplay},{verseDisplay}) {renderText}</div>
+                <div className="Verse" onClick={() => speakVerse(voice, audio, idx, voiceChapter)}> ({chapterDisplay},{verseDisplay}) {renderText}</div>
             )
         }
         else{
             return (
-                <div className="VerseTooltip" onClick={() => speakVerse(renderVoice, voice, audio)}> 
+                <div className="VerseTooltip" onClick={() => speakVerse(voice, audio, idx, voiceChapter)}> 
                     ({chapterDisplay},{verseDisplay}) {renderText}
                     <span className="tooltiptext">({chapterDisplay},{verseDisplay}) {renderTooltip}</span>
                 </div>
