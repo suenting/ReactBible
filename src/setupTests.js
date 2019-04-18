@@ -10,4 +10,8 @@ global.fetch = require('jest-fetch-mock');
 const speechSynthesisMock = {
   getVoices: jest.fn(),
 };
+const speechSynthesisUtteranceMock = {
+};
 global.speechSynthesis = speechSynthesisMock;
+
+global.SpeechSynthesisUtterance=function(){};

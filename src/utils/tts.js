@@ -4,6 +4,9 @@ class TTS {
     static locale = 'en-US';
     static continueSpeak = true;
 
+    // this must be static as garbage collector may trigger preventing callback otherwise
+    static speachSyntesisUtterance = new SpeechSynthesisUtterance();
+
     static fetchVoices(){
         // pre-fetch voices since they load async
         window.speechSynthesis.getVoices();
@@ -27,8 +30,9 @@ class TTS {
     }
 
     static speak(line, callback){
-        let msg = new SpeechSynthesisUtterance(line);
+        let msg = TTS.speachSyntesisUtterance;
         TTS.continueSpeak = true;
+        msg.text = line;
         msg.voice = TTS.voice;
         msg.lang = TTS.locale;
         if(callback){
@@ -38,6 +42,9 @@ class TTS {
                 }
                 callback();
             };
+        }
+        else{
+            msg.onend = undefined;
         }
         window.speechSynthesis.speak(msg);
     }
