@@ -26,35 +26,35 @@ it('renders without crashing', () => {
 
 // test navigation
 it('is able to toggle mute', () => {
-  var mute = document.getElementById('mute');
+  const mute = document.getElementById('mute');
   mute.click();
 
-  var unmute = document.getElementById('unmute');
+  const unmute = document.getElementById('unmute');
   unmute.click();
 });
 
 // test next button on next chapter
 it('is able to goto next chapter', ()=>{
-    var nextButton = document.getElementById('nextButton');
-    for(var it = 0; it<50;++it){
+    const nextButton = document.getElementById('nextButton');
+    for(let it = 0; it<50;++it){
         nextButton.click();
     }
-    var navBook = document.getElementById('navBook');
-    var navChapter = document.getElementById('navChapter');
+    const navBook = document.getElementById('navBook');
+    const navChapter = document.getElementById('navChapter');
     expect(navBook.value).toBe('ex');
     expect(navChapter.value).toBe('0');
 });
 
 // test toggle theme
 it('is able to toggle drawer', ()=>{
-    var drawer = document.getElementById('drawericon');
+    const drawer = document.getElementById('drawericon');
     drawer.click();
 });
 
 // test toggle theme
 it('is able to toggle theme', ()=>{
-    var toggle = document.getElementById('toggletheme');
-    var app = document.getElementById('App');
+    const toggle = document.getElementById('toggletheme');
+    const app = document.getElementById('App');
     expect(app.className).toBe('App');
     toggle.click();
     expect(app.className).toBe('App  Dark');

@@ -106,9 +106,9 @@ class Book extends Component {
             return (<div></div>);
         }
         const { actions, book } = this.props;
-        var b = this.state.enBible;
-        var currentBook = findBook(b, book);
-        var bookName = currentBook.name;
+        const b = this.state.enBible;
+        const currentBook = findBook(b, book);
+        const bookName = currentBook.name;
 
         return (
             <div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {findBook} from '../utils/common';
@@ -23,7 +23,7 @@ import ToolTipIcon from '@material-ui/icons/FindReplace';
 import MuteIcon from '@material-ui/icons/VolumeMute';
 import UnMuteIcon from '@material-ui/icons/VolumeUp';
 
-class Navigation extends Component {
+class Navigation extends PureComponent {
 
     constructor(props){
         super(props);
@@ -58,7 +58,7 @@ class Navigation extends Component {
     }
     
     onChangeBook(event) {
-        var abbrev = event.target.value;
+        const abbrev = event.target.value;
         this.props.actions.gotoBook(abbrev);
     }
     onChangeChapter(event) {
@@ -90,17 +90,17 @@ class Navigation extends Component {
             return (<div></div>);
         }
         const { book, chapter, text, voice, audio, theme, tooltip } = this.props;
-        var b = this.state.enBible;
-        var currentBook = findBook(b, book);
-        var chapterList = [];
-        for(var it = 0; it<currentBook.chapters.length; ++it){
+        const b = this.state.enBible;
+        const currentBook = findBook(b, book);
+        const chapterList = [];
+        for(let it = 0; it<currentBook.chapters.length; ++it){
             chapterList.push(it);
         }
-        var mapBooks = function(X)
+        const mapBooks = function(X)
         {
             return <option key={X.name} value={X.abbrev}>{X.name}</option>;
         }
-        var mapChapters = function(X, it)
+        const mapChapters = function(X, it)
         {
             return <option key={X} value={X}>{X+1}</option>;
         }

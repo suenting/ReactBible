@@ -1,7 +1,7 @@
 import { GOTO_BOOK, GOTO_CHAPTER, SET_AUDIO, SET_TEXT_LOCALE, SET_VOICE_LOCALE, SET_THEME, SET_TOOLTIP_LOCALE } from '../constants/ActionTypes'
 
 // default state
-var initialState = {
+let initialState = {
     book:"gn",
     chapter:"0",
     audio:true,
@@ -11,22 +11,22 @@ var initialState = {
     theme:"light"
 }
 
-var LoadState = function(){
+const LoadState = function(){
     const previousState = localStorage.getItem('react-bible-state');
     if(previousState  && previousState !== "undefined")    {
-      var stateObj = JSON.parse(previousState);
+      const stateObj = JSON.parse(previousState);
       initialState = stateObj;
     }
 }
 LoadState();
 
-var SaveState = function(state){
+const SaveState = function(state){
   const serializedState = JSON.stringify(state);
   localStorage.setItem('react-bible-state', serializedState);
 }
 
 export default function ReactBibleReducer(state = initialState, action) {
-  var newState = state;
+  let newState = state;
 
   switch (action.type) {
     case GOTO_BOOK:

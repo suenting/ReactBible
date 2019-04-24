@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import {findBook} from '../utils/common'
 import './Verse.css';
 import TTS from '../utils/tts'
 
-class Verse extends Component {
+class Verse extends PureComponent {
 
     constructor(props){
         super(props);
@@ -16,7 +16,7 @@ class Verse extends Component {
 
     render() {
         let htmlDecode = function(input){
-            var doc = new DOMParser().parseFromString(input, "text/html");
+            const doc = new DOMParser().parseFromString(input, "text/html");
             return doc.documentElement.textContent;
         }
         let getLocaleText = function(locale, verseDisplay){
@@ -50,22 +50,22 @@ class Verse extends Component {
             }
         }
         const { idx, chapter, book, text, voice, audio, tooltip } = this.props;
-        var enB = this.state.enBible;
+        const enB = this.state.enBible;
         var enCurrentBook = findBook(enB, book);
         var enCurrentChapter = enCurrentBook.chapters[chapter];
 
         // note other languages may not always be loaded if not used
-        var zhB = this.state.zhBible;
+        const zhB = this.state.zhBible;
         if(zhB.length>0){
             var zhCurrentBook = findBook(zhB, book);
             var zhCurrentChapter = zhCurrentBook.chapters[chapter];
         }
         
-        var chapterDisplay = parseInt(chapter,10)+1;
-        var verseDisplay = parseInt(idx,10)+1;
+        const chapterDisplay = parseInt(chapter,10)+1;
+        const verseDisplay = parseInt(idx,10)+1;
 
-        var renderText = "";
-        var renderTooltip = "";
+        let renderText = "";
+        let renderTooltip = "";
 
         renderText = getLocaleText(text, verseDisplay);
         renderTooltip = getLocaleText(tooltip, verseDisplay);

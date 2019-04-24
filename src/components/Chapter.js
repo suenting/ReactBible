@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import './Chapter.css';
 import Verse from './Verse'
 import { findBook, findNextBook } from '../utils/common'
 
-class Chapter extends Component {
+class Chapter extends PureComponent {
 
     constructor(props){
         super(props);
@@ -21,28 +21,28 @@ class Chapter extends Component {
     onNext(bible, book, chapter) {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         // if next chapter
-        var intChapter = parseInt(chapter, 10);
+        const intChapter = parseInt(chapter, 10);
         if (intChapter < (book.chapters.length - 1)) {
             this.props.actions.gotoChapter(intChapter + 1);
             return;
         }
         
         // if next book
-        var nextBook = findNextBook(bible, book.abbrev);
+        const nextBook = findNextBook(bible, book.abbrev);
         if (nextBook) {
             this.props.actions.gotoBook(nextBook.abbrev);
         }
     }
     render() {
         const { chapter, book } = this.props;
-        var enB = this.state.enBible;
-        var zhB = this.state.zhBible;
-        var currentBook = findBook(enB, book);
-        var currentChapter = currentBook.chapters[chapter];
-        var ListVerse = function (X, index) {
+        const enB = this.state.enBible;
+        const zhB = this.state.zhBible;
+        const currentBook = findBook(enB, book);
+        const currentChapter = currentBook.chapters[chapter];
+        const ListVerse = function (X, index) {
             return <Verse key={index+X} idx={index} enBible={enB} zhBible={zhB} >{X}</Verse>;
         };
-        var chapterDisplay = parseInt(chapter, 10) + 1;
+        const chapterDisplay = parseInt(chapter, 10) + 1;
         return (
             <div className="container Chapter">
                 <h3>Chapter {chapterDisplay}</h3>

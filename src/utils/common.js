@@ -1,5 +1,5 @@
 export function findBook(bible, abbrev){
-    for(var it = 0; it<bible.length; ++it)
+    for(let it = 0; it<bible.length; ++it)
     {
         if(bible[it].abbrev === abbrev)
         {
@@ -9,7 +9,7 @@ export function findBook(bible, abbrev){
 }
 
 export function findNextBook(bible, abbrev){
-    for(var it = 0; it<bible.length; ++it)
+    for(let it = 0; it<bible.length; ++it)
     {
         if(bible[it].abbrev === abbrev)
         {
