@@ -16,6 +16,10 @@ class Book extends Component {
         this.state = {
             enBible: [],
             zhBible: [],
+            elBible: [],
+            deBible: [],
+            frBible: [],
+            esBible: [],
             isLoaded: false,
         };
     }
@@ -26,6 +30,14 @@ class Book extends Component {
                 return this.state.enBible.length>0;
             case 'ZH':
                 return this.state.zhBible.length>0;
+            case 'EL':
+                return this.state.elBible.length>0;
+            case 'DE':
+                return this.state.deBible.length>0;
+            case 'FR':
+                return this.state.frBible.length>0;
+            case 'ES':
+                return this.state.esBible.length>0;
             default:
                 return true;
         }
@@ -66,6 +78,54 @@ class Book extends Component {
                 })
             });
             promiseList.push(zhPromise);
+        }
+
+        // german
+        if(HasLocale(this, 'DE') && !this.isLocaleLoaded("DE")){
+            let dePromise = fetch('./de_schlachter.json')
+            .then(result => result.json())
+            .then(result => {
+                this.setState({
+                    deBible:result
+                })
+            });
+            promiseList.push(dePromise);
+        }
+
+        // greek
+        if(HasLocale(this, 'EL') && !this.isLocaleLoaded("EL")){
+            let elPromise = fetch('./el_greek.json')
+            .then(result => result.json())
+            .then(result => {
+                this.setState({
+                    elBible:result
+                })
+            });
+            promiseList.push(elPromise);
+        }
+
+        // spanish
+        if(HasLocale(this, 'ES') && !this.isLocaleLoaded("ES")){
+            let esPromise = fetch('./es_rvr.json')
+            .then(result => result.json())
+            .then(result => {
+                this.setState({
+                    esBible:result
+                })
+            });
+            promiseList.push(esPromise);
+        }
+
+        // french
+        if(HasLocale(this, 'FR') && !this.isLocaleLoaded("FR")){
+            let frPromise = fetch('./fr_apee.json')
+            .then(result => result.json())
+            .then(result => {
+                this.setState({
+                    frBible:result
+                })
+            });
+            promiseList.push(frPromise);
         }
 
         Promise.all(promiseList).then(result => {
@@ -112,7 +172,11 @@ class Book extends Component {
 
         const bibles = {
             EN: this.state.enBible,
-            ZH: this.state.zhBible
+            ZH: this.state.zhBible,
+            EL: this.state.elBible,
+            DE: this.state.deBible,
+            FR: this.state.frBible,
+            ES: this.state.esBible
         }
 
         return (

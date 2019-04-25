@@ -59,6 +59,10 @@ class TTS {
                 TTS.voice = findVoiceByURI("Google UK English Female");
                 TTS.locale = 'en-US';
                 break;
+            case 'DE':
+                TTS.voice = findVoiceByLang("de-DE");
+                TTS.locale = 'de-DE';                
+                break;                
             case 'FR':
                 TTS.voice = findVoiceByLang("fr-FR");
                 TTS.locale = 'fr-FR';                

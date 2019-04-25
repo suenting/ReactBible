@@ -14,6 +14,14 @@ class Verse extends PureComponent {
                     return bibles.EN;
                 case 'ZH':
                     return bibles.ZH;
+                case 'EL':
+                    return bibles.EL;
+                case 'DE':
+                    return bibles.DE;
+                case 'FR':
+                    return bibles.FR;
+                case 'ES':
+                    return bibles.ES;
                 default:
                     return null;
             }

@@ -129,6 +129,10 @@ class Navigation extends PureComponent {
                         <select id="navText" className="form-control" value={text} onChange={(event)=>{this.onChangeText(event)}}>
                             <option value='EN'>English</option>
                             <option value='ZH'>Chinese</option>
+                            <option value='EL'>Greek</option>
+                            <option value='DE'>German</option>
+                            <option value='FR'>French</option>
+                            <option value='ES'>Spanish</option>
                         </select>
                     </ListItem>
 
@@ -143,6 +147,9 @@ class Navigation extends PureComponent {
                         <select id="navVoice" className="form-control" value={voice} onChange={(event)=>{this.onChangeVoice(event)}}>
                             <option value='EN'>English</option>
                             <option value='ZH'>Chinese</option>
+                            <option value='DE'>German</option>
+                            <option value='FR'>French</option>
+                            <option value='ES'>Spanish</option>                            
                         </select>
                     </ListItem>
                     <ListItem>
@@ -186,6 +193,10 @@ class Navigation extends PureComponent {
                             <option value='NA'>N/A</option>
                             <option value='EN'>English</option>
                             <option value='ZH'>Chinese</option>
+                            <option value='EL'>Greek</option>
+                            <option value='DE'>German</option>
+                            <option value='FR'>French</option>
+                            <option value='ES'>Spanish</option>                            
                         </select>
                         </ListItemText>
                     </ListItem>                    
