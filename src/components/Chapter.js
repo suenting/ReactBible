@@ -6,15 +6,6 @@ import Verse from './Verse'
 import { findBook, findNextBook } from '../utils/common'
 
 class Chapter extends PureComponent {
-
-    constructor(props){
-        super(props);
-        this.state = {
-            enBible: props.enBible,
-            zhBible: props.zhBible
-        }
-    }
-
     static propTypes = {
         actions: PropTypes.object.isRequired
     }
@@ -34,13 +25,12 @@ class Chapter extends PureComponent {
         }
     }
     render() {
-        const { chapter, book } = this.props;
-        const enB = this.state.enBible;
-        const zhB = this.state.zhBible;
+        const { chapter, book, bibles } = this.props;
+        const enB = bibles.EN;
         const currentBook = findBook(enB, book);
         const currentChapter = currentBook.chapters[chapter];
         const ListVerse = function (X, index) {
-            return <Verse key={index+X} idx={index} enBible={enB} zhBible={zhB} >{X}</Verse>;
+            return <Verse key={index+X} idx={index} bibles={bibles}>{X}</Verse>;
         };
         const chapterDisplay = parseInt(chapter, 10) + 1;
         return (

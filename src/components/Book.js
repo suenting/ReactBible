@@ -110,12 +110,17 @@ class Book extends Component {
         const currentBook = findBook(b, book);
         const bookName = currentBook.name;
 
+        const bibles = {
+            EN: this.state.enBible,
+            ZH: this.state.zhBible
+        }
+
         return (
             <div>
                 <h1>{bookName}</h1>
                 <br />
                 <br />
-                <Chapter actions={actions} enBible={this.state.enBible} zhBible={this.state.zhBible} />
+                <Chapter actions={actions} bibles={bibles} />
                 <br />
                 <br />
             </div>

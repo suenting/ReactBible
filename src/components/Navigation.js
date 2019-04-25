@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import {findBook} from '../utils/common';
 import './Navigation.css';
 import TTS from '../utils/tts';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -50,7 +49,6 @@ class Navigation extends PureComponent {
 
     componentDidMount(){
         this.loadBible();
-        TTS.fetchVoices();
     }    
 
     static propTypes = {

@@ -6,31 +6,40 @@ import TTS from '../utils/tts'
 
 class Verse extends PureComponent {
 
-    constructor(props){
-        super(props);
-        this.state = {
-            enBible: props.enBible,
-            zhBible: props.zhBible
-        }
-    }
-
     render() {
-        let htmlDecode = function(input){
+        const { idx, chapter, book, text, voice, audio, tooltip, bibles } = this.props;
+        const getBibleFromLocale = function(locale){
+            switch(locale){
+                case 'EN':
+                    return bibles.EN;
+                case 'ZH':
+                    return bibles.ZH;
+                default:
+                    return null;
+            }
+        };
+        let textBible = getBibleFromLocale(text);
+        let voiceBible = getBibleFromLocale(voice);
+        let tooltipBible = getBibleFromLocale(tooltip);
+        let textBook = findBook(textBible, book);
+        let voiceBook = findBook(voiceBible, book);
+        let tooltipBook = findBook(tooltipBible, book);
+
+        const getChapter = function(book){
+            return book.chapters[chapter];
+        }
+        const htmlDecode = function(input){
             const doc = new DOMParser().parseFromString(input, "text/html");
             return doc.documentElement.textContent;
-        }
-        let getLocaleText = function(locale, verseDisplay){
-            switch(locale)
-            {
-                case 'EN':
-                   return htmlDecode(enCurrentChapter[verseDisplay-1]);
-                case 'ZH':
-                   return zhCurrentChapter[verseDisplay-1];
-                default:
-                    return '';
-            }            
         }        
-        let speakVerse = function(voice, audio, idx, voiceChapter){
+        const getVerse = function(book, verse){
+            if(!book){
+                return "";
+            }
+            return htmlDecode(book.chapters[chapter][verse]);
+        }
+   
+        const speakVerse = function(voice, audio, idx, voiceChapter){
             if(!audio)
             {
                 return;
@@ -40,7 +49,7 @@ class Verse extends PureComponent {
                 return;
             }
             TTS.setVoice(voice);
-            let line = getLocaleText(voice,idx+1);
+            let line = getVerse(voiceBook,idx);
             if(idx+1<voiceChapter.length){
                 let callback = speakVerse.bind(this,voice, audio,idx+1,voiceChapter);
                 TTS.speak(line, callback);
@@ -49,51 +58,27 @@ class Verse extends PureComponent {
                 TTS.speak(line);
             }
         }
-        const { idx, chapter, book, text, voice, audio, tooltip } = this.props;
-        const enB = this.state.enBible;
-        var enCurrentBook = findBook(enB, book);
-        var enCurrentChapter = enCurrentBook.chapters[chapter];
-
-        // note other languages may not always be loaded if not used
-        const zhB = this.state.zhBible;
-        if(zhB.length>0){
-            var zhCurrentBook = findBook(zhB, book);
-            var zhCurrentChapter = zhCurrentBook.chapters[chapter];
-        }
         
-        const chapterDisplay = parseInt(chapter,10)+1;
-        const verseDisplay = parseInt(idx,10)+1;
+        const chapterInt = parseInt(chapter,10);
+        const verse = parseInt(idx,10);
 
         let renderText = "";
         let renderTooltip = "";
 
-        renderText = getLocaleText(text, verseDisplay);
-        renderTooltip = getLocaleText(tooltip, verseDisplay);
-
-        let voiceChapter = [];
-        switch(voice){
-            case 'EN':
-                voiceChapter = enCurrentChapter;
-                break;
-            case 'ZH':
-                voiceChapter = zhCurrentChapter;
-                break;
-            default:
-                break;
-        }
-
+        renderText = getVerse(textBook, verse);
+        renderTooltip = getVerse(tooltipBook, verse);
 
         if('NA' === tooltip)
         {
             return (
-                <div className="Verse" onClick={() => speakVerse(voice, audio, idx, voiceChapter)}> ({chapterDisplay},{verseDisplay}) {renderText}</div>
+                <div className="Verse" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}> ({chapterInt+1},{verse+1}) {renderText}</div>
             )
         }
         else{
             return (
-                <div className="VerseTooltip" onClick={() => speakVerse(voice, audio, idx, voiceChapter)}> 
-                    ({chapterDisplay},{verseDisplay}) {renderText}
-                    <span className="tooltiptext">({chapterDisplay},{verseDisplay}) {renderTooltip}</span>
+                <div className="VerseTooltip" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}> 
+                    ({chapterInt+1},{verse+1}) {renderText}
+                    <span className="tooltiptext">({chapterInt+1},{verse+1}) {renderTooltip}</span>
                 </div>
             )            
         }
