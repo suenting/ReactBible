@@ -13,6 +13,7 @@ Features:<br />
 - Text to speach using web speech api https://w3c.github.io/speech-api/speechapi.html<br />
 - dark/light mode themes<br />
 - Co-Read Powered by 'https://togetherjs.com/'<br />
+- Installable to home screen and service-worker cache first requests enabled via service-workers 'https://developers.google.com/web/fundamentals/primers/service-workers/'<br />
 <br />
 <br />
 Bible JSON obtained from 'https://github.com/thiagobodruk/bible'
