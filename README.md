@@ -7,7 +7,7 @@ example build on git-site: <a href="https://suenting.github.io/ReactBible/index.
 <br />
 <br />
 Features:<br />
-- Built with React 'https://reactjs.org/' and Redux 'https://redux.js.org/'
+- Built with React 'https://reactjs.org/' and Redux 'https://redux.js.org/' <br />
 - Responsive layout using 'https://material-ui.com/'<br />
 - Multi language support<br />
 - Text to speach using web speech api https://w3c.github.io/speech-api/speechapi.html<br />
