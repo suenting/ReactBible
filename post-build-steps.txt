@@ -3,18 +3,21 @@ Update service worker
 - add cache stratagy localcache->then request if failed
 /**
 }),
-self.addEventListener('fetch', function(event) {
-    event.respondWith(
-      caches.open('reactbible-dynamic').then(function(cache) {
-        return cache.match(event.request).then(function (response) {
-          return response || fetch(event.request).then(function(response) {
-            cache.put(event.request, response.clone());
-            return response;
-          });
-        });
-      })
-    );
-});
+    self.addEventListener('fetch', function (event) {
+        if ((event.request.url.indexOf('http') === 0)) {
+            event.respondWith(
+                caches.open('reactbible-dynamic').then(function (cache) {
+                    return cache.match(event.request).then(function (response) {
+                        return response || fetch(event.request).then(function (response) {
+                            if (event)
+                                cache.put(event.request, response.clone());
+                            return response;
+                        });
+                    });
+                })
+            );
+        }
+    });
 **/
 
 asset-manifest.json
