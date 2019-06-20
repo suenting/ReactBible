@@ -30,3 +30,8 @@
 .Dark{
   min-height: 100vh;
 }
+
+.AbsoluteRight{
+  position: absolute;
+  right: 25px;
+}

@@ -7,6 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
+import VoiceNavigation from '../components/VoiceNavigation'
 
 //icons
 import MenuIcon from '@material-ui/icons/Menu';
@@ -41,6 +42,9 @@ class Shell extends React.Component {
                             <Typography variant="title" color="inherit" noWrap>
                                 React Bible
                             </Typography>
+                            <div className="AbsoluteRight">
+                            <VoiceNavigation></VoiceNavigation>
+                            </div>
                         </Toolbar>
                     </AppBar>
                     <Drawer
