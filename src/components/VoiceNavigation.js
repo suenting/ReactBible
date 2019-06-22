@@ -78,7 +78,8 @@ class ReactVoice extends Component{
     constructor(props){
         super(props);
         this.state = {
-            line: ""
+            line: "",
+            enabled: VoiceImpl.isSupported()
         };
 
         
@@ -102,13 +103,12 @@ class ReactVoice extends Component{
             const navBook = document.getElementById('navBook');
             navBook.value = booksAbrrv[idxBook];
             navBook.dispatchEvent( new Event('change', {bubbles: true}));
-
-            if(idxChapter){
-                const navChapter = document.getElementById('navChapter');
-                navChapter.value = idxChapter;
-                navChapter.dispatchEvent( new Event('change', {bubbles: true}));
-            }
         }
+        if(idxChapter>=0){
+            const navChapter = document.getElementById('navChapter');
+            navChapter.value = idxChapter;
+            navChapter.dispatchEvent( new Event('change', {bubbles: true}));
+        }        
     }
 
     start(){
@@ -116,11 +116,14 @@ class ReactVoice extends Component{
     }
 
     render(){
-        return(
-            <div>
-                <MicIcon id="micIcon" onClick={(event)=>{this.start()}} />
-            </div>
-        )
+        if(this.state.enabled){
+            return(
+                <div>
+                    <MicIcon id="micIcon" onClick={(event)=>{this.start()}} />
+                </div>
+            )
+        }
+        return <div></div>;
     };
 }
 
