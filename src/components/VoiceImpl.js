@@ -2,12 +2,12 @@
 /* eslint-disable no-undef */
 
 var SpeechRecognition = null;
-var SpeechGrammarList = null;
-var SpeechRecognitionEvent = null;
+//var SpeechGrammarList = null;
+//var SpeechRecognitionEvent = null;
 try{
     SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-    SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
-    SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+    //SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+    //SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 }catch(err){
     // ignore
 }

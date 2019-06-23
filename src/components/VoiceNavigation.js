@@ -78,19 +78,37 @@ class ReactVoice extends Component{
     constructor(props){
         super(props);
         this.state = {
+            enBible:[],
+            isLoaded:false,
             line: "",
             enabled: VoiceImpl.isSupported()
         };
-
-        
-
     }
+
+    loadBible(){
+        // todo: consider sliming this json file down
+        fetch('./en_kjv.json')
+        .then(result=>result.json())
+        .then(result=>{
+            this.setState({
+                enBible: result,
+                isLoaded: true
+            });
+        })
+        .catch(error=>{
+            setTimeout(()=>{this.loadBible()},500);
+        });
+    }
+
+    componentDidMount(){
+        this.loadBible();
+    }  
 
     onVoiceCommand = (line)=>{
         this.setState({
             line: line
         });
-        
+
         // handle command here
         line = line.replace("Chapter","chapter")
         const splitLine = line.split("chapter");
@@ -98,13 +116,23 @@ class ReactVoice extends Component{
         const voiceChapter = splitLine[1]?splitLine[1].trim():"";
         const idxBook = books.indexOf(voiceBook);
         const idxChapter = parseInt(voiceChapter,10)-1;
+        
+        const currentBookAbbrv = document.getElementById('navBook').value;
+        let currentBookIdx = booksAbrrv.indexOf(currentBookAbbrv);
 
         if(idxBook>=0){
+            currentBookIdx = idxBook;
             const navBook = document.getElementById('navBook');
             navBook.value = booksAbrrv[idxBook];
             navBook.dispatchEvent( new Event('change', {bubbles: true}));
         }
-        if(idxChapter>=0){
+
+        // verify chapter is within bounds of selected book
+        if(!this.state.isLoaded){
+            return;
+        }
+        const maxChapter = this.state.enBible[currentBookIdx].chapters.length;
+        if(idxChapter>=0 && idxChapter<maxChapter){
             const navChapter = document.getElementById('navChapter');
             navChapter.value = idxChapter;
             navChapter.dispatchEvent( new Event('change', {bubbles: true}));
@@ -112,7 +140,7 @@ class ReactVoice extends Component{
     }
 
     start(){
-        VoiceImpl.start(this.onVoiceCommand);
+        VoiceImpl.start((line)=>{this.onVoiceCommand(line)});
     }
 
     render(){
