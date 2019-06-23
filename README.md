@@ -10,6 +10,7 @@ Features:<br />
 - Built with React 'https://reactjs.org/' and Redux 'https://redux.js.org/' <br />
 - Responsive layout using 'https://material-ui.com/'<br />
 - Multi language support<br />
+- Voice Navigation Widget via Speech recognition 'https://w3c.github.io/speech-api/' usage: "{Book Name} chapter {chapter number}" ie. "Psalms Chapter 8"<br />
 - Text to speach using web speech api https://w3c.github.io/speech-api/speechapi.html<br />
 - dark/light mode themes<br />
 - Co-Read Powered by 'https://togetherjs.com/'<br />
