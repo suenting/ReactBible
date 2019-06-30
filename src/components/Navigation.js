@@ -33,8 +33,7 @@ class Navigation extends PureComponent {
     }
 
     loadBible(){
-        // todo: consider sliming this json file down
-        fetch('./en_kjv.json')
+        fetch('./en_nav.json')
         .then(result=>result.json())
         .then(result=>{
             this.setState({
@@ -60,6 +59,11 @@ class Navigation extends PureComponent {
         this.props.actions.gotoBook(abbrev);
     }
     onChangeChapter(event) {
+        const intValue = parseInt(event.target.value,10);
+        // prevent chapter from being set out of range
+        if( !(intValue>0 && intValue<event.target.options.length) ){
+            return;
+        }
         this.props.actions.gotoChapter(event.target.value);
     }
     onChangeText(event) {

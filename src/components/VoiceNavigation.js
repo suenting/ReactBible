@@ -86,8 +86,7 @@ class ReactVoice extends Component{
     }
 
     loadBible(){
-        // todo: consider sliming this json file down
-        fetch('./en_kjv.json')
+        fetch('./en_nav.json')
         .then(result=>result.json())
         .then(result=>{
             this.setState({
