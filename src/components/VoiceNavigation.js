@@ -145,7 +145,7 @@ class ReactVoice extends Component{
     render(){
         if(this.state.enabled){
             return(
-                <div>
+                <div title={`Try saying "Matthew chapter 5"`}>
                     <MicIcon id="micIcon" onClick={(event)=>{this.start()}} />
                 </div>
             )
