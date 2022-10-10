@@ -38,7 +38,7 @@ class Shell extends React.Component {
                         })}
                     >
                         <Toolbar disableGutters={!this.state.drawer}>
-                            <MenuIcon id="drawericon" className={classes.menuButton} onClick={this.toggleDrawer} />
+                            <span id="drawericon" onClick={this.toggleDrawer}><MenuIcon className={classes.menuButton}  /></span>
                             <Typography variant="title" color="inherit" noWrap>
                                 React Bible
                             </Typography>

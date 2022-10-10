@@ -1,5 +1,4 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useReducer } from 'react';
 import { connect } from 'react-redux';
 import {findBook} from '../utils/common';
 import './Navigation.css';
@@ -22,199 +21,196 @@ import ToolTipIcon from '@material-ui/icons/FindReplace';
 import MuteIcon from '@material-ui/icons/VolumeMute';
 import UnMuteIcon from '@material-ui/icons/VolumeUp';
 
-class Navigation extends PureComponent {
-
-    constructor(props){
-        super(props);
-        this.state = {
-            enBible:[],
-            isLoaded:false,
-        };
+const reducer = (state, action) => {
+    switch(action.type) {
+        case 'loadBible':
+            return {...state, isLoaded: true, enBible: action.payload};
+        case 'setLine':
+            return {...state, line: action.payload};
     }
+}
+const initial = {
+    enBible:[],
+    isLoaded:false
+};
 
-    loadBible(){
-        fetch('./en_nav.json')
-        .then(result=>result.json())
-        .then(result=>{
-            this.setState({
-                enBible: result,
-                isLoaded: true
+const Navigation = (props) => {
+    const [state, dispatch] = useReducer(reducer, initial);
+
+    useEffect(()=>{
+        const loadBible = () => {
+            fetch('./en_nav.json')
+            .then(result=>result.json())
+            .then(result=>{
+                dispatch({type: 'loadBible', payload: result})
+            })
+            .catch(error=>{
+                setTimeout(()=>{loadBible()},500);
             });
-        })
-        .catch(error=>{
-            setTimeout(()=>{this.loadBible()},500);
-        });
-    }
-
-    componentDidMount(){
-        this.loadBible();
-    }    
-
-    static propTypes = {
-        actions: PropTypes.object.isRequired
-    }
+        }
+        loadBible();
+    },[]);
     
-    onChangeBook(event) {
+    const onChangeBook = (event) => {
         const abbrev = event.target.value;
-        this.props.actions.gotoBook(abbrev);
+        props.actions.gotoBook(abbrev);
     }
-    onChangeChapter(event) {
+    const onChangeChapter = (event) => {
         const intValue = parseInt(event.target.value,10);
         // prevent chapter from being set out of range
         if( !(intValue>0 && intValue<event.target.options.length) ){
             return;
         }
-        this.props.actions.gotoChapter(event.target.value);
+        props.actions.gotoChapter(event.target.value);
     }
-    onChangeText(event) {
-        this.props.actions.setTextLocale(event.target.value);
+    const onChangeText = (event) => {
+        props.actions.setTextLocale(event.target.value);
     }
-    onChangeToolTip(event) {
-        this.props.actions.setToolTipLocale(event.target.value);
+    const onChangeToolTip = (event) => {
+        props.actions.setToolTipLocale(event.target.value);
     }    
-    onChangeVoice(event) {
-        this.props.actions.setVoiceLocale(event.target.value);
+    const onChangeVoice = (event) => {
+        props.actions.setVoiceLocale(event.target.value);
         TTS.cancel();
     }
-    onChangeAudioEnable(enabled){
-        this.props.actions.setAudio(enabled);
+    const onChangeAudioEnable = (enabled) => {
+        props.actions.setAudio(enabled);
         TTS.cancel();
     }
-    onChangeTheme(theme){
-        this.props.actions.setTheme(theme);
+    const onChangeTheme = (theme) => {
+        props.actions.setTheme(theme);
     }
-    toggleTogetherJS(event){
+    const toggleTogetherJS = (event) => {
         window.TogetherJS();
     }
 
-    render() {
-        if(!this.state.isLoaded){
-            return (<div></div>);
-        }
-        const { book, chapter, text, voice, audio, theme, tooltip } = this.props;
-        const b = this.state.enBible;
-        const currentBook = findBook(b, book);
-        const chapterList = [];
-        for(let it = 0; it<currentBook.chapters.length; ++it){
-            chapterList.push(it);
-        }
-        const mapBooks = function(X)
-        {
-            return <option key={X.name} value={X.abbrev}>{X.name}</option>;
-        }
-        const mapChapters = function(X, it)
-        {
-            return <option key={X} value={X}>{X+1}</option>;
-        }
-        return (
-            <div className="Navigation">
-                <List component="nav">
-                    
-                    <ListItem>
-                        <ListItemIcon><BookmarkIcon/></ListItemIcon>
-                        <ListItemText>Navigation</ListItemText>
-                    </ListItem>
-                    <ListItem>
-                    <select id="navBook" className="form-control BookNavigation" value={book} onChange={(event)=>{this.onChangeBook(event)}}>
-                        {b.map(mapBooks)}
-                    </select>
-                    <select id="navChapter" className="form-control ChapterNavigation" value={chapter} onChange={(event)=>{this.onChangeChapter(event)}}>
-                        {chapterList.map(mapChapters)}
-                    </select>
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                        <ListItemIcon><LanguageIcon/></ListItemIcon>
-                        <ListItemText>
-                        Text Language
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <select id="navText" className="form-control" value={text} onChange={(event)=>{this.onChangeText(event)}}>
-                            <option value='EN'>English</option>
-                            <option value='ZH'>Chinese</option>
-                            <option value='EL'>Greek</option>
-                            <option value='DE'>German</option>
-                            <option value='FR'>French</option>
-                            <option value='ES'>Spanish</option>
-                        </select>
-                    </ListItem>
 
-                    <Divider />
-                    <ListItem>
-                        <ListItemIcon><VoiceIcon/></ListItemIcon>
-                        <ListItemText>
-                        Voice Language
-                        </ListItemText>
-                    </ListItem>
-                    <ListItem>
-                        <select id="navVoice" className="form-control" value={voice} onChange={(event)=>{this.onChangeVoice(event)}}>
-                            <option value='EN'>English</option>
-                            <option value='ZH'>Chinese</option>
-                            <option value='DE'>German</option>
-                            <option value='FR'>French</option>
-                            <option value='ES'>Spanish</option>                            
-                        </select>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemIcon>
-                        { audio?
-                            (<UnMuteIcon></UnMuteIcon>):
-                            (<MuteIcon></MuteIcon>)
-                        }
-                        </ListItemIcon>
-                        <ListItemText>
-                        { audio?
-                            (<button id="mute" className="navbtn btn btn-outline-primary" onClick={(event)=>{this.onChangeAudioEnable(false)}}>Mute</button>):
-                            (<button id="unmute" className="navbtn btn btn-outline-secondary" onClick={(event)=>{this.onChangeAudioEnable(true)}}>UnMute</button>)
-                        }
-                        </ListItemText>                        
-                    </ListItem>
-                    <br />
-                    <Divider />
-                    <ListItem>
-                        <ListItemIcon><BrightIcon/></ListItemIcon>
-                        <ListItemText>
-                            {
-                                theme==='dark'?
-                                (<button id="toggletheme" className="navbtn btn btn-outline-primary" onClick={(event)=>{this.onChangeTheme('light')}}>Toggle Theme</button>):
-                                (<button id="toggletheme" className="navbtn btn btn-outline-primary" onClick={(event)=>{this.onChangeTheme('dark')}}>Toggle Theme</button>)
-                            }
-                        </ListItemText>
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                        <ListItemIcon><GroupIcon/></ListItemIcon>
-                        <ListItemText>
-                        <button className="navbtn btn btn-outline-primary" onClick={(event)=>{this.toggleTogetherJS(event)}}>Read Together</button>
-                        </ListItemText>
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                        <ListItemIcon><ToolTipIcon/></ListItemIcon>
-                        <ListItemText>
-                        <select id="navToolTip" className="form-control" value={tooltip} onChange={(event)=>{this.onChangeToolTip(event)}}>
-                            <option value='NA'>N/A</option>
-                            <option value='EN'>English</option>
-                            <option value='ZH'>Chinese</option>
-                            <option value='EL'>Greek</option>
-                            <option value='DE'>German</option>
-                            <option value='FR'>French</option>
-                            <option value='ES'>Spanish</option>                            
-                        </select>
-                        </ListItemText>
-                    </ListItem>                    
-                    <Divider />
-                    <ListItem>
-                        <ListItemIcon><CodeIcon/></ListItemIcon>
-                        <ListItemText>
-                            <a className="navbtn btn btn-outline-primary" rel="noopener noreferrer" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
-                        </ListItemText>
-                    </ListItem>                    
-                </List>
-            </div>
-        )
+    if(!state.isLoaded){
+        return (<div></div>);
     }
+    const { book, chapter, text, voice, audio, theme, tooltip } = props;
+    const b = state.enBible;
+    const currentBook = findBook(b, book);
+    const chapterList = [];
+    for(let it = 0; it<currentBook.chapters.length; ++it){
+        chapterList.push(it);
+    }
+    const mapBooks = function(X)
+    {
+        return <option key={X.name} value={X.abbrev}>{X.name}</option>;
+    }
+    const mapChapters = function(X, it)
+    {
+        return <option key={X} value={X}>{X+1}</option>;
+    }
+    return (
+        <div className="Navigation">
+            <List component="nav">
+                
+                <ListItem>
+                    <ListItemIcon><BookmarkIcon/></ListItemIcon>
+                    <ListItemText>Navigation</ListItemText>
+                </ListItem>
+                <ListItem>
+                <select id="navBook" className="form-control BookNavigation" value={book} onChange={(event)=>{onChangeBook(event)}}>
+                    {b.map(mapBooks)}
+                </select>
+                <select id="navChapter" className="form-control ChapterNavigation" value={chapter} onChange={(event)=>{onChangeChapter(event)}}>
+                    {chapterList.map(mapChapters)}
+                </select>
+                </ListItem>
+                <Divider />
+                <ListItem>
+                    <ListItemIcon><LanguageIcon/></ListItemIcon>
+                    <ListItemText>
+                    Text Language
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <select id="navText" className="form-control" value={text} onChange={(event)=>{onChangeText(event)}}>
+                        <option value='EN'>English</option>
+                        <option value='ZH'>Chinese</option>
+                        <option value='EL'>Greek</option>
+                        <option value='DE'>German</option>
+                        <option value='FR'>French</option>
+                        <option value='ES'>Spanish</option>
+                    </select>
+                </ListItem>
+
+                <Divider />
+                <ListItem>
+                    <ListItemIcon><VoiceIcon/></ListItemIcon>
+                    <ListItemText>
+                    Voice Language
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <select id="navVoice" className="form-control" value={voice} onChange={(event)=>{onChangeVoice(event)}}>
+                        <option value='EN'>English</option>
+                        <option value='ZH'>Chinese</option>
+                        <option value='DE'>German</option>
+                        <option value='FR'>French</option>
+                        <option value='ES'>Spanish</option>                            
+                    </select>
+                </ListItem>
+                <ListItem>
+                    <ListItemIcon>
+                    { audio?
+                        (<UnMuteIcon></UnMuteIcon>):
+                        (<MuteIcon></MuteIcon>)
+                    }
+                    </ListItemIcon>
+                    <ListItemText>
+                    { audio?
+                        (<button id="mute" className="navbtn btn btn-outline-primary" onClick={(event)=>{onChangeAudioEnable(false)}}>Mute</button>):
+                        (<button id="unmute" className="navbtn btn btn-outline-secondary" onClick={(event)=>{onChangeAudioEnable(true)}}>UnMute</button>)
+                    }
+                    </ListItemText>                        
+                </ListItem>
+                <br />
+                <Divider />
+                <ListItem>
+                    <ListItemIcon><BrightIcon/></ListItemIcon>
+                    <ListItemText>
+                        {
+                            theme==='dark'?
+                            (<button id="toggletheme" className="navbtn btn btn-outline-primary" onClick={(event)=>{onChangeTheme('light')}}>Toggle Theme</button>):
+                            (<button id="toggletheme" className="navbtn btn btn-outline-primary" onClick={(event)=>{onChangeTheme('dark')}}>Toggle Theme</button>)
+                        }
+                    </ListItemText>
+                </ListItem>
+                <Divider />
+                <ListItem>
+                    <ListItemIcon><GroupIcon/></ListItemIcon>
+                    <ListItemText>
+                    <button className="navbtn btn btn-outline-primary" onClick={(event)=>{toggleTogetherJS(event)}}>Read Together</button>
+                    </ListItemText>
+                </ListItem>
+                <Divider />
+                <ListItem>
+                    <ListItemIcon><ToolTipIcon/></ListItemIcon>
+                    <ListItemText>
+                    <select id="navToolTip" className="form-control" value={tooltip} onChange={(event)=>{onChangeToolTip(event)}}>
+                        <option value='NA'>N/A</option>
+                        <option value='EN'>English</option>
+                        <option value='ZH'>Chinese</option>
+                        <option value='EL'>Greek</option>
+                        <option value='DE'>German</option>
+                        <option value='FR'>French</option>
+                        <option value='ES'>Spanish</option>                            
+                    </select>
+                    </ListItemText>
+                </ListItem>                    
+                <Divider />
+                <ListItem>
+                    <ListItemIcon><CodeIcon/></ListItemIcon>
+                    <ListItemText>
+                        <a className="navbtn btn btn-outline-primary" rel="noopener noreferrer" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
+                    </ListItemText>
+                </ListItem>                    
+            </List>
+        </div>
+    )
 }
 
 function mapStateToProps(state) {

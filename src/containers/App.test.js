@@ -1,15 +1,16 @@
 import React from 'react';
+import {render, fireEvent, waitFor, screen} from '@testing-library/react'
 import ReactDOM from 'react-dom';
 import App from './App';
+import {flush} from '../utils/test';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers';
-
 import bibleMock from '../../public/en_kjv.json';
 describe("general app tests", () => {
     // basic test
-    it('renders without crashing', () => {
+    it('renders without crashing', async () => {
         fetch.mockResponse(JSON.stringify(bibleMock));
         const div = document.createElement('div');
         document.body.appendChild(div);
@@ -19,6 +20,7 @@ describe("general app tests", () => {
                 <App />
             </Provider>
             , div);
+        await flush();
     });
 
 
@@ -65,56 +67,57 @@ describe("general app tests", () => {
         const verseList = document.getElementsByClassName('Verse');
         expect(verseList.length).toBe(22);
         verseList[0].click();
-    });    
-
+    });
+    
+    
     // test toggle book and chapter
     it('is able to change book and chapter', ()=>{
         const navBook = document.getElementById('navBook');
         const navChapter = document.getElementById('navChapter');
 
-        navBook.value = 'EX';
-        navBook.dispatchEvent( new Event('change', {bubbles: true}));
-
-        navChapter.value = '2';
-        navChapter.dispatchEvent( new Event('change', {bubbles: true}));        
+        fireEvent.change(navBook, { target: { value: "ex" } });
+        fireEvent.change(navChapter, { target: { value: "2" } });
     });
 
     // test toggle language
-    it('is able to toggle language', () => {
+    it('is able to toggle language', async () => {
+        // arrange
+        fetch.mockResponse(JSON.stringify(bibleMock));
         const sel = document.getElementById('navText');
 
-        sel.value = 'ZH';
-        sel.dispatchEvent( new Event('change', {bubbles: true}));
+        fireEvent.change(sel, { target: { value: "ZH" } });
+        await flush();
         expect(fetch).toBeCalledWith('./zh_ncv.json');
 
-        sel.value = 'EL';
-        sel.dispatchEvent( new Event('change', {bubbles: true}));
+        fireEvent.change(sel, { target: { value: "EL" } });
+        await flush();
         expect(fetch).toBeCalledWith('./el_greek.json');
 
-        sel.value = 'DE';
-        sel.dispatchEvent( new Event('change', {bubbles: true}));
+        fireEvent.change(sel, { target: { value: "DE" } });
+        await flush();
         expect(fetch).toBeCalledWith('./de_schlachter.json');
         
-        sel.value = 'FR';
-        sel.dispatchEvent( new Event('change', {bubbles: true}));
+        fireEvent.change(sel, { target: { value: "FR" } });
+        await flush();
         expect(fetch).toBeCalledWith('./fr_apee.json');        
 
-        sel.value = 'ES';
-        sel.dispatchEvent( new Event('change', {bubbles: true}));
+        fireEvent.change(sel, { target: { value: "ES" } });
+        await flush();
         expect(fetch).toBeCalledWith('./es_rvr.json');
     });
 
     // test voice swap doesn't crash
-    it('is able to change voice language', ()=>{
+    it('is able to change voice language', async()=>{
         const navVoice = document.getElementById('navVoice');
-        navVoice.value = 'FR';
-        navVoice.dispatchEvent( new Event('change', {bubbles: true}));
+        fireEvent.change(navVoice, { target: { value: "FR" } });
+        await flush();
     });
 
     // test tooltip swap doesn't crash
-    it('is able to change tooltip language', ()=>{
+    it('is able to change tooltip language', async()=>{
         const navToolTip = document.getElementById('navToolTip');
-        navToolTip.value = 'DE';
-        navToolTip.dispatchEvent( new Event('change', {bubbles: true}));
+        fireEvent.change(navToolTip, { target: { value: "DE" } });
+        await flush();
+        
     });
 });
