@@ -13,7 +13,7 @@ class TTS {
     }
 
     static setVoice(locale) {
-        let voices = window.speechSynthesis.getVoices();
+        let voices = window.speechSynthesis.getVoices() || [];
         /*
         0: Microsoft David Desktop - English (United States)
         1: Microsoft Zira Desktop - English (United States)
@@ -109,7 +109,9 @@ class TTS {
         else {
             msg.onend = undefined;
         }
-        window.speechSynthesis.speak(msg);
+        if(window?.speechSynthesis?.speak) {
+            window.speechSynthesis.speak(msg);
+        }
     }
 
     static cancel() {

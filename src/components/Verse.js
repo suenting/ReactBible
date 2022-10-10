@@ -1,96 +1,91 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import {findBook} from '../utils/common'
 import './Verse.css';
 import TTS from '../utils/tts'
 
-class Verse extends PureComponent {
-
-    render() {
-        const { idx, chapter, book, text, voice, audio, tooltip, bibles } = this.props;
-        const getBibleFromLocale = function(locale){
-            switch(locale){
-                case 'EN':
-                    return bibles.EN;
-                case 'ZH':
-                    return bibles.ZH;
-                case 'EL':
-                    return bibles.EL;
-                case 'DE':
-                    return bibles.DE;
-                case 'FR':
-                    return bibles.FR;
-                case 'ES':
-                    return bibles.ES;
-                default:
-                    return null;
-            }
-        };
-        let textBible = getBibleFromLocale(text);
-        let voiceBible = getBibleFromLocale(voice);
-        let tooltipBible = getBibleFromLocale(tooltip);
-        let textBook = findBook(textBible, book);
-        let voiceBook = findBook(voiceBible, book);
-        let tooltipBook = findBook(tooltipBible, book);
-
-        const getChapter = function(book){
-            return book.chapters[chapter];
+const Verse = (props) => {
+    const { idx, chapter, book, text, voice, audio, tooltip, bibles } = props;
+    const getBibleFromLocale = function(locale){
+        switch(locale){
+            case 'EN':
+                return bibles.EN;
+            case 'ZH':
+                return bibles.ZH;
+            case 'EL':
+                return bibles.EL;
+            case 'DE':
+                return bibles.DE;
+            case 'FR':
+                return bibles.FR;
+            case 'ES':
+                return bibles.ES;
+            default:
+                return null;
         }
-        const htmlDecode = function(input){
-            const doc = new DOMParser().parseFromString(input, "text/html");
-            return doc.documentElement.textContent;
-        }        
-        const getVerse = function(book, verse){
-            if(!book){
-                return "";
-            }
-            return htmlDecode(book.chapters[chapter][verse]);
+    };
+    let textBible = getBibleFromLocale(text);
+    let voiceBible = getBibleFromLocale(voice);
+    let tooltipBible = getBibleFromLocale(tooltip);
+    let textBook = findBook(textBible, book);
+    let voiceBook = findBook(voiceBible, book);
+    let tooltipBook = findBook(tooltipBible, book);
+
+    const getChapter = function(book){
+        return book.chapters[chapter];
+    }
+    const htmlDecode = function(input){
+        const doc = new DOMParser().parseFromString(input, "text/html");
+        return doc.documentElement.textContent;
+    }        
+    const getVerse = function(book, verse){
+        if(!book){
+            return "";
         }
-   
-        const speakVerse = function(voice, audio, idx, voiceChapter){
-            if(!audio)
-            {
-                return;
-            }
-            if(TTS.isSpeeaking()){
-                TTS.cancel();
-                return;
-            }
-            TTS.setVoice(voice);
-            let line = getVerse(voiceBook,idx);
-            if(idx+1<voiceChapter.length){
-                let callback = speakVerse.bind(this,voice, audio,idx+1,voiceChapter);
-                TTS.speak(line, callback);
-            }
-            else{
-                TTS.speak(line);
-            }
-        }
-        
-        const chapterInt = parseInt(chapter,10);
-        const verse = parseInt(idx,10);
+        return htmlDecode(book.chapters[chapter][verse]);
+    }
 
-        let renderText = "";
-        let renderTooltip = "";
-
-        renderText = getVerse(textBook, verse);
-        renderTooltip = getVerse(tooltipBook, verse);
-
-        if('NA' === tooltip)
+    const speakVerse = function(voice, audio, idx, voiceChapter){
+        if(!audio)
         {
-            return (
-                <div className="Verse" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}> ({chapterInt+1},{verse+1}) {renderText}</div>
-            )
+            return;
+        }
+        if(TTS.isSpeeaking()){
+            TTS.cancel();
+            return;
+        }
+        TTS.setVoice(voice);
+        let line = getVerse(voiceBook,idx);
+        if(idx+1<voiceChapter.length){
+            let callback = speakVerse.bind(this,voice, audio,idx+1,voiceChapter);
+            TTS.speak(line, callback);
         }
         else{
-            return (
-                <div className="VerseTooltip" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}> 
-                    ({chapterInt+1},{verse+1}) {renderText}
-                    <span className="tooltiptext">({chapterInt+1},{verse+1}) {renderTooltip}</span>
-                </div>
-            )            
+            TTS.speak(line);
         }
     }
+    
+    const chapterInt = parseInt(chapter,10);
+    const verse = parseInt(idx,10);
+
+    let renderText = "";
+    let renderTooltip = "";
+
+    renderText = getVerse(textBook, verse);
+    renderTooltip = getVerse(tooltipBook, verse);
+
+    if('NA' === tooltip)
+    {
+        return (
+            <div className="Verse" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}> ({chapterInt+1},{verse+1}) {renderText}</div>
+        )
+    }
+    return (
+        <div className="VerseTooltip" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}> 
+            ({chapterInt+1},{verse+1}) {renderText}
+            <span className="tooltiptext">({chapterInt+1},{verse+1}) {renderTooltip}</span>
+        </div>
+    )
 }
 
 function mapStateToProps(state) {

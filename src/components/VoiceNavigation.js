@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MicIcon from '@material-ui/icons/Mic';
 import VoiceImpl from './VoiceImpl';
@@ -74,39 +74,41 @@ const books = [
 
 const booksAbrrv = ["gn", "ex", "lv", "nm", "dt", "js", "jud", "rt", "1sm", "2sm", "1kgs", "2kgs", "1ch", "2ch", "ezr", "ne", "et", "job", "ps", "prv", "ec", "so", "is", "jr", "lm", "ez", "dn", "ho", "jl", "am", "ob", "jn", "mi", "na", "hk", "zp", "hg", "zc", "ml", "mt", "mk", "lk", "jo", "act", "rm", "1co", "2co", "gl", "eph", "ph", "cl", "1ts", "2ts", "1tm", "2tm", "tt", "phm", "hb", "jm", "1pe", "2pe", "1jo", "2jo", "3jo", "jd", "re"];
 
-class ReactVoice extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            enBible:[],
-            isLoaded:false,
-            line: "",
-            enabled: VoiceImpl.isSupported()
-        };
+const reducer = (state, action) => {
+    switch(action.type) {
+        case 'loadBible':
+            return {...state, isLoaded: true, enBible: action.payload};
+        case 'setLine':
+            return {...state, line: action.payload};
     }
+}
+const initial = {
+    enBible:[],
+    isLoaded:false,
+    line: "",
+    enabled: VoiceImpl.isSupported()
+};
 
-    loadBible(){
-        fetch('./en_nav.json')
-        .then(result=>result.json())
-        .then(result=>{
-            this.setState({
-                enBible: result,
-                isLoaded: true
+const ReactVoice = () => {
+    const [state, dispatch] = useReducer(reducer, initial);
+
+
+    useEffect(()=>{
+        const loadBible = () => {
+            fetch('./en_nav.json')
+            .then(result=>result.json())
+            .then(result=>{
+                dispatch({type: 'loadBible', payload: result})
+            })
+            .catch(error=>{
+                setTimeout(()=>{loadBible()},500);
             });
-        })
-        .catch(error=>{
-            setTimeout(()=>{this.loadBible()},500);
-        });
-    }
+        }
+        loadBible();
+    },[]);
 
-    componentDidMount(){
-        this.loadBible();
-    }  
-
-    onVoiceCommand = (line)=>{
-        this.setState({
-            line: line
-        });
+    const onVoiceCommand = (line)=>{
+        dispatch({type: 'setLine', payload: line});
 
         // handle command here
         line = line.replace("Chapter","chapter")
@@ -127,10 +129,10 @@ class ReactVoice extends Component{
         }
 
         // verify chapter is within bounds of selected book
-        if(!this.state.isLoaded){
+        if(!state.isLoaded){
             return;
         }
-        const maxChapter = this.state.enBible[currentBookIdx].chapters.length;
+        const maxChapter = state.enBible[currentBookIdx].chapters.length;
         if(idxChapter>=0 && idxChapter<maxChapter){
             const navChapter = document.getElementById('navChapter');
             navChapter.value = idxChapter;
@@ -138,20 +140,18 @@ class ReactVoice extends Component{
         }        
     }
 
-    start(){
-        VoiceImpl.start((line)=>{this.onVoiceCommand(line)});
+    const start=()=>{
+        VoiceImpl.start((line)=>{onVoiceCommand(line)});
     }
 
-    render(){
-        if(this.state.enabled){
-            return(
-                <div title={`Try saying "Matthew chapter 5"`}>
-                    <MicIcon id="micIcon" onClick={(event)=>{this.start()}} />
-                </div>
-            )
-        }
-        return <div></div>;
-    };
+    if(state.enabled){
+        return(
+            <div title={`Try saying "Matthew chapter 5"`}>
+                <MicIcon id="micIcon" onClick={(event)=>{start()}} />
+            </div>
+        )
+    }
+    return <div></div>;
 }
 
 ReactVoice.propTypes ={
