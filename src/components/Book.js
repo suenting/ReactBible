@@ -1,195 +1,170 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useReducer } from 'react'
 import { connect } from 'react-redux'
 import Chapter from './Chapter'
 import { findBook } from '../utils/common'
-class Book extends Component {
-    static propTypes = {
-        actions: PropTypes.object.isRequired,
-        text: PropTypes.string.isRequired,
-        tooltip: PropTypes.string.isRequired,
-        voice: PropTypes.string.isRequired,
-    }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            enBible: [],
-            zhBible: [],
-            elBible: [],
-            deBible: [],
-            frBible: [],
-            esBible: [],
-            isLoaded: false,
-        };
+const reducer = (state, action) => {
+    switch(action.type) {
+        case 'loadEN':
+            return {...state, enBible: action.payload};
+        case 'loadZH':
+            return {...state, zhBible: action.payload};
+        case 'loadEL':
+            return {...state, elBible: action.payload};
+        case 'loadDE':
+            return {...state, deBible: action.payload};
+        case 'loadFR':
+            return {...state, frBible: action.payload};
+        case 'loadES':
+            return {...state, esBible: action.payload};
+        case 'setLoaded':
+            return {...state, isLoaded: action.payload};
     }
+}
+const initial = {
+    enBible:[],
+    zhBible: [],
+    elBible: [],
+    deBible: [],
+    frBible: [],
+    esBible: [],
+    isLoaded:false
+};
 
-    isLocaleLoaded(locale){
+const Book = (props) => {
+    const [state, dispatch] = useReducer(reducer, initial);
+    const isLocaleLoaded = (locale) => {
         switch(locale){
             case 'EN':
-                return this.state.enBible.length>0;
+                return state.enBible.length>0;
             case 'ZH':
-                return this.state.zhBible.length>0;
+                return state.zhBible.length>0;
             case 'EL':
-                return this.state.elBible.length>0;
+                return state.elBible.length>0;
             case 'DE':
-                return this.state.deBible.length>0;
+                return state.deBible.length>0;
             case 'FR':
-                return this.state.frBible.length>0;
+                return state.frBible.length>0;
             case 'ES':
-                return this.state.esBible.length>0;
+                return state.esBible.length>0;
             default:
                 return true;
         }
     }
 
-    fetchBibleJson(){
+    const fetchBibleJson = () => {
         let promiseList = [];
         // always load english
-        if(!this.isLocaleLoaded("EN")){
+        if(!isLocaleLoaded("EN")){
             let enPromise = fetch('./en_kjv.json')
             .then(result => result.json())
             .then(result => {
-                this.setState({
-                    enBible:result
-                })
+                dispatch({type: 'loadEN', payload: result});
             });
             promiseList.push(enPromise);
         }
 
         // only load other locales if used
-        const HasLocale = function(self, locale){
+        const HasLocale = function(locale){
             if( 
-                self.props.text === locale || 
-                self.props.voice === locale ||
-                self.props.tooltip === locale ){
+                props.text === locale || 
+                props.voice === locale ||
+                props.tooltip === locale ){
                     return true;
                 }
             return false;
         }
 
         // chinese
-        if(HasLocale(this, 'ZH') && !this.isLocaleLoaded("ZH")){
+        if(HasLocale('ZH') && !isLocaleLoaded("ZH")){
             let zhPromise = fetch('./zh_ncv.json')
             .then(result => result.json())
             .then(result => {
-                this.setState({
-                    zhBible:result
-                })
+                dispatch({type: 'loadZH', payload: result});
             });
             promiseList.push(zhPromise);
         }
 
         // german
-        if(HasLocale(this, 'DE') && !this.isLocaleLoaded("DE")){
+        if(HasLocale('DE') && !isLocaleLoaded("DE")){
             let dePromise = fetch('./de_schlachter.json')
             .then(result => result.json())
             .then(result => {
-                this.setState({
-                    deBible:result
-                })
+                dispatch({type: 'loadDE', payload: result});
             });
             promiseList.push(dePromise);
         }
 
         // greek
-        if(HasLocale(this, 'EL') && !this.isLocaleLoaded("EL")){
+        if(HasLocale('EL') && !isLocaleLoaded("EL")){
             let elPromise = fetch('./el_greek.json')
             .then(result => result.json())
             .then(result => {
-                this.setState({
-                    elBible:result
-                })
+                dispatch({type: 'loadEL', payload: result});
             });
             promiseList.push(elPromise);
         }
 
         // spanish
-        if(HasLocale(this, 'ES') && !this.isLocaleLoaded("ES")){
+        if(HasLocale('ES') && !isLocaleLoaded("ES")){
             let esPromise = fetch('./es_rvr.json')
             .then(result => result.json())
             .then(result => {
-                this.setState({
-                    esBible:result
-                })
+                dispatch({type: 'loadES', payload: result});
             });
             promiseList.push(esPromise);
         }
 
         // french
-        if(HasLocale(this, 'FR') && !this.isLocaleLoaded("FR")){
+        if(HasLocale('FR') && !isLocaleLoaded("FR")){
             let frPromise = fetch('./fr_apee.json')
             .then(result => result.json())
             .then(result => {
-                this.setState({
-                    frBible:result
-                })
+                dispatch({type: 'loadFR', payload: result});
             });
             promiseList.push(frPromise);
         }
 
         Promise.all(promiseList).then(result => {
-            this.setState({
-                isLoaded: true
-            });
+            dispatch({type: 'setLoaded', payload: true});
         })
         .catch(error=>{
             // retry on error
-            setTimeout(()=>{this.fetchBibleJson()},3000);
+            setTimeout(()=>{fetchBibleJson()},3000);
         });
     }
+    useEffect(()=>{
+        dispatch({type: 'setLoaded', payload: false});
+        fetchBibleJson();
+    },[props.text, props.voice, props.tooltip]);
 
-    componentDidMount() {
-        this.fetchBibleJson();
+    if (!state.isLoaded) {
+        return (<div></div>);
     }
-    componentDidUpdate(prevProps) {
-        if( 
-            this.props.text ===prevProps.text && 
-            this.props.voice ===prevProps.voice &&
-            this.props.tooltip ===prevProps.tooltip ){
-                return;
-            }
-        if(
-            this.isLocaleLoaded(this.props.text) &&
-            this.isLocaleLoaded(this.props.voice) &&
-            this.isLocaleLoaded(this.props.tooltip)){
-                return;
-            }
-            this.setState({
-                isLoaded: false
-            });
-            this.fetchBibleJson();
+    const { actions, book } = props;
+    const b = state.enBible;
+    const currentBook = findBook(b, book);
+    const bookName = currentBook.name;
+
+    const bibles = {
+        EN: state.enBible,
+        ZH: state.zhBible,
+        EL: state.elBible,
+        DE: state.deBible,
+        FR: state.frBible,
+        ES: state.esBible
     }
 
-    render() {
-        if (!this.state.isLoaded) {
-            return (<div></div>);
-        }
-        const { actions, book } = this.props;
-        const b = this.state.enBible;
-        const currentBook = findBook(b, book);
-        const bookName = currentBook.name;
-
-        const bibles = {
-            EN: this.state.enBible,
-            ZH: this.state.zhBible,
-            EL: this.state.elBible,
-            DE: this.state.deBible,
-            FR: this.state.frBible,
-            ES: this.state.esBible
-        }
-
-        return (
-            <div>
-                <h1>{bookName}</h1>
-                <br />
-                <br />
-                <Chapter actions={actions} bibles={bibles} />
-                <br />
-                <br />
-            </div>
-        )
-    }
+    return (
+        <div>
+            <h1>{bookName}</h1>
+            <br />
+            <br />
+            <Chapter actions={actions} bibles={bibles} />
+            <br />
+            <br />
+        </div>
+    )
 }
 
 function mapStateToProps(state) {
