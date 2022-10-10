@@ -58,7 +58,7 @@ const Navigation = (props) => {
     const onChangeChapter = (event) => {
         const intValue = parseInt(event.target.value,10);
         // prevent chapter from being set out of range
-        if( !(intValue>0 && intValue<event.target.options.length) ){
+        if( !(intValue>=0 && intValue<event.target.options.length) ){
             return;
         }
         props.actions.gotoChapter(event.target.value);
