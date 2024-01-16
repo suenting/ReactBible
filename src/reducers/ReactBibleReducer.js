@@ -12,10 +12,24 @@ let initialState = {
 }
 
 const LoadState = function(){
+    // initial load state call
     const previousState = localStorage.getItem('react-bible-state');
     if(previousState  && previousState !== "undefined")    {
       const stateObj = JSON.parse(previousState);
       initialState = stateObj;
+    }
+
+    // read query string params if they exist
+    const queryString = window?.location?.search;
+    if(queryString) {
+      const urlParams = new URLSearchParams(queryString);
+      const book = urlParams.get('book');
+      const chapterUrl = urlParams.get('chapter');
+      if (book && chapterUrl) {
+        const chapter = `${(parseInt(chapterUrl)-1)}`;
+        initialState.book = book;
+        initialState.chapter = chapter;
+      }
     }
 }
 LoadState();
@@ -23,6 +37,13 @@ LoadState();
 const SaveState = function(state){
   const serializedState = JSON.stringify(state);
   localStorage.setItem('react-bible-state', serializedState);
+
+  // write query string params
+  if (history.replaceState) {
+    const urlChapter = parseInt(state.chapter)+1; // display chapter as 1 based index
+    const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?book=${state.book}&chapter=${urlChapter}`;
+    window.history.replaceState({path:newurl},'',newurl);
+  }
 }
 
 export default function ReactBibleReducer(state = initialState, action) {

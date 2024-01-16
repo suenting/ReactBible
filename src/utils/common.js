@@ -25,3 +25,19 @@ export function findNextBook(bible, abbrev){
     }
     return null;
 }
+
+export function findPrevBook(bible, abbrev){
+    if(!bible){
+        return null;
+    }    
+    for(let it = 0; it<bible.length; ++it)
+    {
+        if(bible[it].abbrev === abbrev)
+        {
+            if(it>0) {
+                return bible[it-1];
+            }
+        }
+    }
+    return null;
+}

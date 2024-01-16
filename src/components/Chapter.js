@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import './Chapter.css';
 import Verse from './Verse'
-import { findBook, findNextBook } from '../utils/common'
+import { findBook, findNextBook, findPrevBook } from '../utils/common'
 
 const Chapter = (props) => {
 
@@ -21,6 +21,22 @@ const Chapter = (props) => {
             props.actions.gotoBook(nextBook.abbrev);
         }
     }
+    const onPrev = (bible, book, chapter) => {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        // if next chapter
+        const intChapter = parseInt(chapter, 10);
+        if (intChapter > 0) {
+            props.actions.gotoChapter(intChapter - 1);
+            return;
+        }
+        
+        // if next book
+        const nextBook = findPrevBook(bible, book.abbrev);
+        if (nextBook) {
+            props.actions.gotoBook(nextBook.abbrev);
+            props.actions.gotoChapter(nextBook.chapters.length - 1);
+        }
+    }
 
     const { chapter, book, bibles } = props;
     const enB = bibles.EN;
@@ -36,7 +52,10 @@ const Chapter = (props) => {
             <br />
             {currentChapter.map(ListVerse)}
             <br />
-            <center><button id="nextButton" className="btn btn-outline-primary" onClick={(event) => { onNext(enB, currentBook, chapter) }}>NEXT</button></center>
+            <center>
+                <button id="nextButton" className="btn btn-outline-primary" onClick={(event) => { onPrev(enB, currentBook, chapter) }}>PREV</button>{' '}
+                <button id="nextButton" className="btn btn-outline-primary" onClick={(event) => { onNext(enB, currentBook, chapter) }}>NEXT</button>
+            </center>
         </div>
     )
 }
