@@ -12,6 +12,7 @@ describe('bible reducer', () => {
                 voice_locale: "EN",
                 theme: "light",
                 tooltip_locale: "NA",
+                share: false
             }
         )
     })
@@ -89,6 +90,35 @@ describe('bible reducer', () => {
             })
         ).toEqual({
             theme: "dark"
+        })
+    })    
+    it('should handle SET_SHARE', () => {
+        expect(
+            reducer([], {
+                type: types.SET_SHARE,
+                text: true
+            })
+        ).toEqual({
+            share: true
+        })
+    })    
+    it('should handle SET_VERSE', () => {
+        expect(
+            reducer([], {
+                type: types.SET_VERSE,
+                text: 1
+            })
+        ).toEqual({
+            verse: 1
+        })
+    })    
+    it('should handle CLEAR_VERSE', () => {
+        expect(
+            reducer([], {
+                type: types.CLEAR_VERSE
+            })
+        ).toEqual({
+            verse: undefined
         })
     })    
 })

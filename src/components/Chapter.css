@@ -3,3 +3,13 @@
 {
     text-align:left;
 }
+
+.VerseContainer
+{
+    display:flex;
+}
+
+.VerseShare
+{
+    cursor: pointer;
+}

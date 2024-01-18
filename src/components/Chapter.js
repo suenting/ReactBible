@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import './Chapter.css';
 import Verse from './Verse'
+import ShareIcon from '@material-ui/icons/Share';
 import { findBook, findNextBook, findPrevBook } from '../utils/common'
 
 const Chapter = (props) => {
@@ -14,7 +15,7 @@ const Chapter = (props) => {
             props.actions.gotoChapter(intChapter + 1);
             return;
         }
-        
+
         // if next book
         const nextBook = findNextBook(bible, book.abbrev);
         if (nextBook) {
@@ -29,7 +30,7 @@ const Chapter = (props) => {
             props.actions.gotoChapter(intChapter - 1);
             return;
         }
-        
+
         // if next book
         const nextBook = findPrevBook(bible, book.abbrev);
         if (nextBook) {
@@ -38,12 +39,25 @@ const Chapter = (props) => {
         }
     }
 
-    const { chapter, book, bibles } = props;
+    const onSetVerse = (verse) => {
+        props.actions.setVerse(verse);
+    }
+    const onClearVerse = (verse) => {
+        props.actions.clearVerse();
+    }
+
+    const { chapter, book, bibles, share, verse } = props;
     const enB = bibles.EN;
     const currentBook = findBook(enB, book);
     const currentChapter = currentBook.chapters[chapter];
     const ListVerse = function (X, index) {
-        return <Verse key={index+X} idx={index} bibles={bibles}>{X}</Verse>;
+        if (typeof(verse) === "number" && verse !== index) {
+            return <></>;
+        }
+        return <div className="VerseContainer">
+            { (share && (typeof(verse) !== "number")) && <ShareIcon className={'VerseShare'} onClick={()=>{onSetVerse(index);}} />}
+            <Verse key={index + X} idx={index} bibles={bibles} >{X}</Verse>
+        </div>;
     };
     const chapterDisplay = parseInt(chapter, 10) + 1;
     return (
@@ -52,15 +66,18 @@ const Chapter = (props) => {
             <br />
             {currentChapter.map(ListVerse)}
             <br />
-            <center>
-                <button id="nextButton" className="btn btn-outline-primary" onClick={(event) => { onPrev(enB, currentBook, chapter) }}>PREV</button>{' '}
+            {(typeof(verse) === "number") && <center>
+                <button id="prevButton" className="btn btn-outline-primary" onClick={(event) => { onClearVerse() }}>BACK</button>
+            </center>}
+            {(typeof(verse) !== "number") && <center>
+                <button id="prevButton" className="btn btn-outline-primary" onClick={(event) => { onPrev(enB, currentBook, chapter) }}>PREV</button>{' '}
                 <button id="nextButton" className="btn btn-outline-primary" onClick={(event) => { onNext(enB, currentBook, chapter) }}>NEXT</button>
-            </center>
+            </center>}
         </div>
     )
 }
 
 function mapStateToProps(state) {
-    return { chapter: state.ReactBibleReducer.chapter, book: state.ReactBibleReducer.book };
+    return { chapter: state.ReactBibleReducer.chapter, book: state.ReactBibleReducer.book, share: state.ReactBibleReducer.share, verse: state.ReactBibleReducer.verse };
 }
 export default connect(mapStateToProps)(Chapter)

@@ -8,8 +8,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-
-
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import LanguageIcon from '@material-ui/icons/Language';
 import VoiceIcon from '@material-ui/icons/RecordVoiceOver';
@@ -17,9 +15,10 @@ import GroupIcon from '@material-ui/icons/Group';
 import CodeIcon from '@material-ui/icons/Code';
 import BrightIcon from '@material-ui/icons/BrightnessMedium';
 import ToolTipIcon from '@material-ui/icons/FindReplace';
-
 import MuteIcon from '@material-ui/icons/VolumeMute';
 import UnMuteIcon from '@material-ui/icons/VolumeUp';
+import ShareIcon from '@material-ui/icons/Share';
+import QRCode from "react-qr-code";
 
 const reducer = (state, action) => {
     switch(action.type) {
@@ -36,6 +35,7 @@ const initial = {
 
 const Navigation = (props) => {
     const [state, dispatch] = useReducer(reducer, initial);
+    const { book, chapter, text, voice, audio, theme, tooltip, share } = props;
 
     useEffect(()=>{
         const loadBible = () => {
@@ -83,12 +83,22 @@ const Navigation = (props) => {
     const toggleTogetherJS = (event) => {
         window.TogetherJS();
     }
+    const toggleShare = () => {
+        props.actions.setShare(!share);
+    }
+    const copyToClipboard = () => {
+        try {
+            navigator.clipboard.writeText(window.location.href);
+        } catch (err) {
+            // suppress
+        }
+    }
 
 
     if(!state.isLoaded){
         return (<div></div>);
     }
-    const { book, chapter, text, voice, audio, theme, tooltip } = props;
+   
     const b = state.enBible;
     const currentBook = findBook(b, book);
     const chapterList = [];
@@ -203,6 +213,29 @@ const Navigation = (props) => {
                 </ListItem>                    
                 <Divider />
                 <ListItem>
+                    <ListItemIcon><ShareIcon/></ListItemIcon>
+                    <ListItemText>
+                    <button className="navbtn btn btn-outline-primary" onClick={(event)=>{toggleShare(!share)}}>Toggle Share</button>
+                    </ListItemText>
+                </ListItem>
+                {share && <>
+                    <ListItem>
+                    <ListItemText>
+                        <QRCode 
+                            size={256}
+                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                            viewBox={`0 0 256 256`}
+                            value={window.location.href}
+                        />
+
+                        <br /><br />
+                        <button className="navbtn btn btn-outline-primary" onClick={(event)=>{copyToClipboard()}}>Copy URL to clipboard</button>
+
+                    </ListItemText>
+                    </ListItem>
+                </>}
+                <Divider />
+                <ListItem>
                     <ListItemIcon><CodeIcon/></ListItemIcon>
                     <ListItemText>
                         <a className="navbtn btn btn-outline-primary" rel="noopener noreferrer" href="https://github.com/suenting/ReactBible" target="_blank">View Source</a>
@@ -221,6 +254,9 @@ function mapStateToProps(state) {
             tooltip: state.ReactBibleReducer.tooltip_locale,
             audio: state.ReactBibleReducer.audio,
             voice: state.ReactBibleReducer.voice_locale,
-            theme: state.ReactBibleReducer.theme};
+            theme: state.ReactBibleReducer.theme,
+            share: state.ReactBibleReducer.share,
+            verse: state.ReactBibleReducer.verse
+        };
 }
 export default connect(mapStateToProps)(Navigation)
