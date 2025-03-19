@@ -3,6 +3,8 @@ class TTS {
     static voice = undefined;
     static locale = 'en-US';
     static continueSpeak = true;
+    static currentVerse = undefined;
+    static currentChaper = undefined;
 
     // this must be static as garbage collector may trigger preventing callback otherwise
     static speachSyntesisUtterance = new SpeechSynthesisUtterance();
@@ -92,15 +94,35 @@ class TTS {
         }
     }
 
-    static speak(line, callback) {
+    static showSpeakingIndicator = () => {
+        const speakingIndicator = document.getElementById(`isSpeaking_${TTS.chapter}_${TTS.verse}`);
+        if(speakingIndicator) {
+            speakingIndicator.style.display = 'inline';
+        }
+    }
+
+    static hideSpeakingIndicator = () => {
+        const speakingIndicator = document.getElementById(`isSpeaking_${TTS.chapter}_${TTS.verse}`);
+        if(speakingIndicator) {
+            speakingIndicator.style.display = 'none';
+        }
+    }
+
+    static speak(line, callback, chapter = undefined, verse = undefined) {
         let msg = TTS.speachSyntesisUtterance;
         TTS.continueSpeak = true;
         msg.text = line;
         msg.voice = TTS.voice;
         msg.lang = TTS.locale;
+        TTS.chapter = chapter;
+        TTS.verse = verse;
+        TTS.showSpeakingIndicator();
         if (callback) {
             msg.onend = function (e) {
+                TTS.hideSpeakingIndicator();
                 if (!TTS.continueSpeak) {
+                    TTS.chapter = undefined;
+                    TTS.verse = undefined;
                     return;
                 }
                 callback();
@@ -116,11 +138,21 @@ class TTS {
 
     static cancel() {
         window.speechSynthesis.cancel();
+        TTS.hideSpeakingIndicator();
         TTS.continueSpeak = false;
+        TTS.chapter = undefined;
+        TTS.verse = undefined;
     }
 
     static isSpeeaking() {
         return window.speechSynthesis.speaking;
+    }
+
+    static isSpeakingVerse(chapter, verse) {
+        if (chapter === TTS.chapter && verse === TTS.verse && window.speechSynthesis.speaking) {
+            return true;
+        }
+        return false;
     }
 }
 TTS.fetchVoices();

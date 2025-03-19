@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {findBook} from '../utils/common'
+import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import './Verse.css';
 import TTS from '../utils/tts'
 
@@ -45,6 +46,9 @@ const Verse = (props) => {
         return htmlDecode(book.chapters[chapter][verse]);
     }
 
+    const chapterInt = parseInt(chapter,10);
+    const verse = parseInt(idx,10);
+
     const speakVerse = function(voice, audio, idx, voiceChapter){
         if(!audio)
         {
@@ -58,15 +62,12 @@ const Verse = (props) => {
         let line = getVerse(voiceBook,idx);
         if(idx+1<voiceChapter.length){
             let callback = speakVerse.bind(this,voice, audio,idx+1,voiceChapter);
-            TTS.speak(line, callback);
+            TTS.speak(line, callback, chapterInt, idx);
         }
         else{
-            TTS.speak(line);
+            TTS.speak(line, undefined, chapterInt, idx);
         }
     }
-    
-    const chapterInt = parseInt(chapter,10);
-    const verse = parseInt(idx,10);
 
     let renderText = "";
     let renderTooltip = "";
@@ -74,15 +75,19 @@ const Verse = (props) => {
     renderText = getVerse(textBook, verse);
     renderTooltip = getVerse(tooltipBook, verse);
 
+    const RenderIsSpeaking = () => {
+        return <span style={{display: "none"}} id={`isSpeaking_${chapterInt}_${verse}`}><VolumeUpIcon /></span>
+    }
+
     if('NA' === tooltip)
     {
         return (
-            <div className="Verse" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}> ({chapterInt+1},{verse+1}) {renderText}</div>
+            <div className="Verse" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}><RenderIsSpeaking />({chapterInt+1},{verse+1}) {renderText}</div>
         )
     }
     return (
         <div className="VerseTooltip" onClick={() => speakVerse(voice, audio, idx, getChapter(voiceBook))}> 
-            ({chapterInt+1},{verse+1}) {renderText}
+            <RenderIsSpeaking />({chapterInt+1},{verse+1}) {renderText}
             <span className="tooltiptext">({chapterInt+1},{verse+1}) {renderTooltip}</span>
         </div>
     )

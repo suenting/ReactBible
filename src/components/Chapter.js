@@ -54,7 +54,7 @@ const Chapter = (props) => {
         if (typeof(verse) === "number" && verse !== index) {
             return <></>;
         }
-        return <div className="VerseContainer">
+        return <div className="VerseContainer" key={`chapter_${chapter}_verse_${index+1}`}>
             { (share && (typeof(verse) !== "number")) && <ShareIcon className={'VerseShare'} onClick={()=>{onSetVerse(index);}} />}
             <Verse key={index + X} idx={index} bibles={bibles} >{X}</Verse>
         </div>;
