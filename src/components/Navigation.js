@@ -35,7 +35,7 @@ const initial = {
 
 const Navigation = (props) => {
     const [state, dispatch] = useReducer(reducer, initial);
-    const { book, chapter, text, voice, audio, theme, tooltip, share } = props;
+    const { book, chapter, text, voice, voicePref, audio, theme, tooltip, share } = props;
 
     useEffect(()=>{
         const loadBible = () => {
@@ -71,6 +71,15 @@ const Navigation = (props) => {
     }    
     const onChangeVoice = (event) => {
         props.actions.setVoiceLocale(event.target.value);
+        TTS.cancel();
+    }
+    const onChangeVoicePref = (event) => {
+        if(!event?.target?.value || event.target.value === 'default') {
+            props.actions.setVoicePrefUri(undefined);    
+        }
+        else {
+            props.actions.setVoicePrefUri(event.target.value);
+        }
         TTS.cancel();
     }
     const onChangeAudioEnable = (enabled) => {
@@ -113,6 +122,9 @@ const Navigation = (props) => {
     {
         return <option key={X} value={X}>{X+1}</option>;
     }
+
+    const voiceList = TTS.fetchVoicesForLanguage(voice);
+
     return (
         <div className="Navigation">
             <List component="nav">
@@ -161,6 +173,20 @@ const Navigation = (props) => {
                         <option value='DE'>German</option>
                         <option value='FR'>French</option>
                         <option value='ES'>Spanish</option>                            
+                    </select>
+                </ListItem>
+                <ListItem>
+                    <ListItemIcon><VoiceIcon/></ListItemIcon>
+                    <ListItemText>
+                    Voice Preference
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <select id="navVoicePref" className="form-control" value={voicePref} onChange={(event)=>{onChangeVoicePref(event)}}>
+                        <option value={undefined}>default</option>
+                        {voiceList.map((sysVoice)=>{
+                            return <option value={sysVoice.voiceURI} key={sysVoice.voiceURI}>{sysVoice.name}</option>;
+                        })}                          
                     </select>
                 </ListItem>
                 <ListItem>
@@ -254,6 +280,7 @@ function mapStateToProps(state) {
             tooltip: state.ReactBibleReducer.tooltip_locale,
             audio: state.ReactBibleReducer.audio,
             voice: state.ReactBibleReducer.voice_locale,
+            voicePref: state.ReactBibleReducer.voice_pref_uri,
             theme: state.ReactBibleReducer.theme,
             share: state.ReactBibleReducer.share,
             verse: state.ReactBibleReducer.verse

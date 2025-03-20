@@ -11,10 +11,38 @@ class TTS {
 
     static fetchVoices() {
         // pre-fetch voices since they load async
-        window.speechSynthesis.getVoices();
+        return window.speechSynthesis.getVoices() || [];
     }
 
-    static setVoice(locale) {
+
+    static getLocaleforVoice(language) {
+        switch (language) {
+            case 'EN':
+                return 'en-US';
+            case 'DE':
+                return 'de-DE';                               
+            case 'FR':
+                return 'fr-FR';                
+            case 'ES':
+                return 'es-ES';                
+            case 'IT':
+                return 'it-IT';                  
+            case 'ID':
+                return 'id-ID';                                               
+            case 'JP':
+                return 'ja-JP';                
+            case 'ZH':
+                return 'zh-CN';
+            default:
+        }
+    }
+
+    static fetchVoicesForLanguage(language) {
+        const allVoices = window.speechSynthesis.getVoices() || [];
+        return allVoices.filter((voice)=>(voice.lang.toLowerCase().startsWith(language.toLowerCase())));
+    }
+
+    static setVoice(locale, preferedVoiceUri = undefined) {
         let voices = window.speechSynthesis.getVoices() || [];
         /*
         0: Microsoft David Desktop - English (United States)
@@ -55,6 +83,13 @@ class TTS {
             }
             return null;
         };
+
+        if(preferedVoiceUri) {
+            const preferedVoice = findVoiceByURI(preferedVoiceUri);
+            TTS.voice = preferedVoice;
+            TTS.locale = preferedVoice.lang;
+            return;
+        }
 
         switch (locale) {
             case 'EN':
@@ -132,6 +167,7 @@ class TTS {
             msg.onend = undefined;
         }
         if(window?.speechSynthesis?.speak) {
+            console.log(msg);
             window.speechSynthesis.speak(msg);
         }
     }

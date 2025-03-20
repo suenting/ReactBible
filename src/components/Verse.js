@@ -6,7 +6,7 @@ import './Verse.css';
 import TTS from '../utils/tts'
 
 const Verse = (props) => {
-    const { idx, chapter, book, text, voice, audio, tooltip, bibles } = props;
+    const { idx, chapter, book, text, voice, voicePref, audio, tooltip, bibles } = props;
     const getBibleFromLocale = function(locale){
         switch(locale){
             case 'EN':
@@ -58,7 +58,7 @@ const Verse = (props) => {
             TTS.cancel();
             return;
         }
-        TTS.setVoice(voice);
+        TTS.setVoice(voice, voicePref);
         let line = getVerse(voiceBook,idx);
         if(idx+1<voiceChapter.length){
             let callback = speakVerse.bind(this,voice, audio,idx+1,voiceChapter);
@@ -100,6 +100,7 @@ function mapStateToProps(state) {
             text: state.ReactBibleReducer.text_locale,
             tooltip: state.ReactBibleReducer.tooltip_locale,
             audio: state.ReactBibleReducer.audio,
+            voicePref: state.ReactBibleReducer.voice_pref_uri,
             voice: state.ReactBibleReducer.voice_locale};
 }
 export default connect(mapStateToProps)(Verse)

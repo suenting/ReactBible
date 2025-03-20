@@ -1,4 +1,4 @@
-import { GOTO_BOOK, GOTO_CHAPTER, SET_AUDIO, SET_TEXT_LOCALE, SET_VOICE_LOCALE, SET_THEME, SET_TOOLTIP_LOCALE, SET_SHARE, SET_VERSE, CLEAR_VERSE } from '../constants/ActionTypes'
+import { GOTO_BOOK, GOTO_CHAPTER, SET_AUDIO, SET_TEXT_LOCALE, SET_VOICE_LOCALE, SET_VOICE_PREF_URI, SET_THEME, SET_TOOLTIP_LOCALE, SET_SHARE, SET_VERSE, CLEAR_VERSE } from '../constants/ActionTypes'
 
 // default state
 let initialState = {
@@ -7,6 +7,7 @@ let initialState = {
   audio: true,
   text_locale: "EN",
   voice_locale: "EN",
+  voice_pref_uri: undefined,
   tooltip_locale: "NA",
   theme: "light",
   share: false
@@ -48,8 +49,8 @@ const SaveState = function (state) {
   if (history.replaceState) {
     const urlChapter = parseInt(state.chapter) + 1; // display chapter as 1 based index
     let verseString = '';
-    if (typeof(state.verse)==="number") {
-      verseString = `&verse=${state.verse+1}`; // display verse as 1 based index
+    if (typeof (state.verse) === "number") {
+      verseString = `&verse=${state.verse + 1}`; // display verse as 1 based index
     }
     const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + `?book=${state.book}&chapter=${urlChapter}${verseString}`;
     window.history.replaceState({ path: newurl }, '', newurl);
@@ -91,7 +92,13 @@ export default function ReactBibleReducer(state = initialState, action) {
       break;
     case SET_VOICE_LOCALE:
       newState = Object.assign({}, state, {
-        voice_locale: action.text
+        voice_locale: action.text,
+        voice_pref_uri: undefined
+      });
+      break;
+    case SET_VOICE_PREF_URI:
+      newState = Object.assign({}, state, {
+        voice_pref_uri: action.text
       });
       break;
     case SET_AUDIO:
