@@ -150,12 +150,19 @@ const Navigation = (props) => {
                 </ListItem>
                 <ListItem>
                     <select id="navText" className="form-control" value={text} onChange={(event)=>{onChangeText(event)}}>
-                        <option value='EN'>English</option>
+                        <option value='EN'>English (KJV)</option>
+                        <option value='EN-BBE'>English (BBE)</option>
                         <option value='ZH'>Chinese</option>
                         <option value='EL'>Greek</option>
                         <option value='DE'>German</option>
                         <option value='FR'>French</option>
                         <option value='ES'>Spanish</option>
+                        <option value='AR'>Arabic</option>
+                        <option value='KO'>Korean</option>
+                        <option value='PT'>Portugese</option>
+                        <option value='RO'>Romanian</option>
+                        <option value='RU'>Russian</option>
+                        <option value='VI'>Vietnamese</option>
                     </select>
                 </ListItem>
 
@@ -168,7 +175,8 @@ const Navigation = (props) => {
                 </ListItem>
                 <ListItem>
                     <select id="navVoice" className="form-control" value={voice} onChange={(event)=>{onChangeVoice(event)}}>
-                        <option value='EN'>English</option>
+                        <option value='EN'>English (KJV)</option>
+                        <option value='EN-BBE'>English (BBE)</option>
                         <option value='ZH'>Chinese</option>
                         <option value='DE'>German</option>
                         <option value='FR'>French</option>

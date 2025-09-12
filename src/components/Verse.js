@@ -11,6 +11,8 @@ const Verse = (props) => {
         switch(locale){
             case 'EN':
                 return bibles.EN;
+            case 'EN-BBE':
+                return bibles.ENB;
             case 'ZH':
                 return bibles.ZH;
             case 'EL':
@@ -21,6 +23,18 @@ const Verse = (props) => {
                 return bibles.FR;
             case 'ES':
                 return bibles.ES;
+            case 'AR':
+                return bibles.AR;
+            case 'KO':
+                return bibles.KO;
+            case 'PT':
+                return bibles.PT;
+            case 'RO':
+                return bibles.RO;
+            case 'RU':
+                return bibles.RU;
+            case 'VI':
+                return bibles.VI;
             default:
                 return null;
         }
