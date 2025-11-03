@@ -38,8 +38,12 @@ class TTS {
     }
 
     static fetchVoicesForLanguage(language) {
+        let searchLangage = language;
+        if(language === 'EN-BBE') {
+            searchLangage = 'EN';
+        }
         const allVoices = window.speechSynthesis.getVoices() || [];
-        return allVoices.filter((voice)=>(voice.lang.toLowerCase().startsWith(language.toLowerCase())));
+        return allVoices.filter((voice)=>(voice.lang.toLowerCase().startsWith(searchLangage.toLowerCase())));
     }
 
     static setVoice(locale, preferedVoiceUri = undefined) {
@@ -93,6 +97,7 @@ class TTS {
 
         switch (locale) {
             case 'EN':
+            case 'EN-BBE':
                 TTS.voice = findVoiceByURI("Google UK English Female");
                 TTS.locale = 'en-US';
                 break;
