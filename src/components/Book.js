@@ -7,8 +7,8 @@ const reducer = (state, action) => {
     switch (action.type) {
         case 'loadEN':
             return { ...state, enBible: action.payload };
-        case 'loadENBBE':
-            return { ...state, enbbeBible: action.payload };
+        case 'loadENNIV':
+            return { ...state, ennivBible: action.payload };
         case 'loadZH':
             return { ...state, zhBible: action.payload };
         case 'loadEL':
@@ -37,7 +37,7 @@ const reducer = (state, action) => {
 }
 const initial = {
     enBible: [],
-    enbbeBible: [],
+    ennivBible: [],
     zhBible: [],
     elBible: [],
     deBible: [],
@@ -58,8 +58,8 @@ const Book = (props) => {
         switch (locale) {
             case 'EN':
                 return state.enBible.length > 0;
-            case 'EN-BBE':
-                return state.enbbeBible.length > 0;
+            case 'EN-NIV':
+                return state.ennivBible.length > 0;
             case 'ZH':
                 return state.zhBible.length > 0;
             case 'EL':
@@ -111,11 +111,11 @@ const Book = (props) => {
         }
 
         // basic english
-        if (HasLocale('EN-BBE') && !isLocaleLoaded("EN-BBE")) {
-            let enbPromise = fetch('./en_bbe.json')
+        if (HasLocale('EN-NIV') && !isLocaleLoaded("EN-NIV")) {
+            let enbPromise = fetch('./en_niv.json')
                 .then(result => result.json())
                 .then(result => {
-                    dispatch({ type: 'loadENBBE', payload: result });
+                    dispatch({ type: 'loadENNIV', payload: result });
                 });
             promiseList.push(enbPromise);
         }
@@ -253,7 +253,7 @@ const Book = (props) => {
 
     const bibles = {
         EN: state.enBible,
-        ENB: state.enbbeBible,
+        ENB: state.ennivBible,
         ZH: state.zhBible,
         EL: state.elBible,
         DE: state.deBible,

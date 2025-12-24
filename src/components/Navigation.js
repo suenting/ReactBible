@@ -134,12 +134,12 @@ const Navigation = (props) => {
                     <ListItemText>Navigation</ListItemText>
                 </ListItem>
                 <ListItem>
-                <select id="navBook" className="form-control BookNavigation" value={book} onChange={(event)=>{onChangeBook(event)}}>
-                    {b.map(mapBooks)}
-                </select>
-                <select id="navChapter" className="form-control ChapterNavigation" value={chapter} onChange={(event)=>{onChangeChapter(event)}}>
-                    {chapterList.map(mapChapters)}
-                </select>
+                    <select id="navBook" className="form-control BookNavigation" value={book} onChange={(event)=>{onChangeBook(event)}}>
+                        {b.map(mapBooks)}
+                    </select>
+                    <select id="navChapter" className="form-control ChapterNavigation" value={chapter} onChange={(event)=>{onChangeChapter(event)}}>
+                        {chapterList.map(mapChapters)}
+                    </select>
                 </ListItem>
                 <Divider />
                 <ListItem>
@@ -151,7 +151,7 @@ const Navigation = (props) => {
                 <ListItem>
                     <select id="navText" className="form-control" value={text} onChange={(event)=>{onChangeText(event)}}>
                         <option value='EN'>English (KJV)</option>
-                        <option value='EN-BBE'>English (BBE)</option>
+                        <option value='EN-NIV'>English (NIV)</option>
                         <option value='ZH'>Chinese</option>
                         <option value='EL'>Greek</option>
                         <option value='DE'>German</option>
@@ -176,7 +176,7 @@ const Navigation = (props) => {
                 <ListItem>
                     <select id="navVoice" className="form-control" value={voice} onChange={(event)=>{onChangeVoice(event)}}>
                         <option value='EN'>English (KJV)</option>
-                        <option value='EN-BBE'>English (BBE)</option>
+                        <option value='EN-NIV'>English (NIV)</option>
                         <option value='ZH'>Chinese</option>
                         <option value='DE'>German</option>
                         <option value='FR'>French</option>

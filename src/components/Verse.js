@@ -11,7 +11,7 @@ const Verse = (props) => {
         switch(locale){
             case 'EN':
                 return bibles.EN;
-            case 'EN-BBE':
+            case 'EN-NIV':
                 return bibles.ENB;
             case 'ZH':
                 return bibles.ZH;

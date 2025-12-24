@@ -39,7 +39,7 @@ class TTS {
 
     static fetchVoicesForLanguage(language) {
         let searchLangage = language;
-        if(language === 'EN-BBE') {
+        if(language === 'EN-NIV') {
             searchLangage = 'EN';
         }
         const allVoices = window.speechSynthesis.getVoices() || [];
@@ -97,7 +97,7 @@ class TTS {
 
         switch (locale) {
             case 'EN':
-            case 'EN-BBE':
+            case 'EN-NIV':
                 TTS.voice = findVoiceByURI("Google UK English Female");
                 TTS.locale = 'en-US';
                 break;

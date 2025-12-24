@@ -18,3 +18,4 @@ Features:<br />
 <br />
 <br />
 Bible JSON obtained from 'https://github.com/thiagobodruk/bible'
+NIV from 'https://github.com/aruljohn/Bible-niv/'
