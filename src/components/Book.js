@@ -267,6 +267,9 @@ const Book = (props) => {
         VI: state.viBible
     }
 
+    // hack set bibles as global so can be used in search.
+    window.bibles = bibles;
+
     return (
         <div>
             <h1>{bookName}</h1>
