@@ -92,7 +92,7 @@ const SearchDialog = ({ open, onClose, text, actions }) => {
         maxWidth="md">
         <DialogTitle>Search {searchResults.length > 0 ? `(${searchResults.length})` : ''}</DialogTitle>
         <DialogContent>
-            <Input onKeyUp={handleKeyUp} value={search} onChange={(e) => { setSearch(e.target.value) }} fullWidth endAdornment={
+            <Input placeholder="Find a verse containing keyword..." onKeyUp={handleKeyUp} value={search} onChange={(e) => { setSearch(e.target.value) }} fullWidth endAdornment={
                 <InputAdornment position="end">
                     <IconButton
                         onClick={onSearchClick}
